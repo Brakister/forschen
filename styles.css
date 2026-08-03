@@ -144,6 +144,7 @@ section{position:relative;padding:160px 0;}
 .section-head .catalog-cta{margin-top:32px;}
 .section-head.center{text-align:center;}
 .section-head.center p{margin-left:auto;margin-right:auto;}
+.section-head.center.wide p{max-width:none;}
 
 .manifesto{background:var(--black-2);}
 .manifesto-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:100px;align-items:start;}
