@@ -6,8 +6,8 @@
   --muted:rgba(233,233,233,0.55); --muted-2:rgba(233,233,233,0.36);
   --display:'Clash Display',sans-serif; --body:'General Sans',sans-serif; --mono:'JetBrains Mono',monospace;
 }
-@property --a{syntax:"angle";initial-value:0deg;inherits:false;}
-@keyframes border-spin{to{--a:360deg;}}
+@property --angle{syntax:"<angle>";initial-value:0deg;inherits:false;}
+@keyframes border-spin{from{--angle:0deg;}to{--angle:360deg;}}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{
   scroll-padding-top:120px;
@@ -114,7 +114,8 @@ nav.links a{transition:color .25s;color:var(--green-light);} nav.links a:hover{c
 .btn-primary::before,.btn-ghost::before,.nav-cta::before,
 .about-card::before,.dist-card::before,.value-item::before{
   content:'';position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;z-index:0;
-  background:conic-gradient(from var(--a) at 50% 50%, var(--green-light), var(--yellow) 30%, var(--green-deep) 55%, var(--yellow) 80%, var(--green-light));
+  background:conic-gradient(from var(--angle) at 50% 50%,
+    var(--green-light), var(--yellow) 25%, var(--green-light) 50%, var(--yellow) 75%, var(--green-light));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
