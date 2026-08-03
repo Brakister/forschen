@@ -35,291 +35,6 @@
 <script>
 (function(){
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-  var pageFlow = null;
-  var maxScroll = function(){
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  };
-
-  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
-  var scrollEngine = {
-    raf: 0,
-    currentY: window.pageYOffset || 0,
-    targetY: window.pageYOffset || 0,
-    velocity: 0,
-    active: false
-  };
-  var lastNativeSnap = 0;
-
-  function getScrollPos(){
-    if(document.body.classList.contains('has-virtual-scroll')){
-      return window.__virtualScrollY || 0;
-    }
-    return window.pageYOffset || 0;
-  }
-
-  function getPageFlow(){
-    if(pageFlow && pageFlow.isConnected) return pageFlow;
-    pageFlow = document.querySelector('.page-flow');
-    return pageFlow;
-  }
-
-  function syncVirtualScroll(){
-    var flow = getPageFlow();
-    if(flow){
-      flow.style.transform = 'translate3d(0,' + (-scrollEngine.currentY) + 'px,0)';
-    }
-    window.__virtualScrollY = scrollEngine.currentY;
-    window.dispatchEvent(new Event('scroll'));
-  }
-
-  function stepScroll(){
-    var delta = scrollEngine.targetY - scrollEngine.currentY;
-    scrollEngine.velocity += delta * 0.085;
-    scrollEngine.velocity *= 0.82;
-    scrollEngine.currentY += scrollEngine.velocity;
-
-    if(Math.abs(delta) < 0.45 && Math.abs(scrollEngine.velocity) < 0.45){
-      scrollEngine.currentY = scrollEngine.targetY;
-      scrollEngine.velocity = 0;
-      scrollEngine.active = false;
-      scrollEngine.raf = 0;
-      window.__scrollActive = false;
-      syncVirtualScroll();
-      return;
-    }
-
-    syncVirtualScroll();
-    scrollEngine.raf = requestAnimationFrame(stepScroll);
-  }
-
-  function startScroll(){
-    if(reduceMotion){
-      scrollEngine.currentY = scrollEngine.targetY;
-      syncVirtualScroll();
-      window.__scrollActive = false;
-      return;
-    }
-    if(scrollEngine.raf) return;
-    scrollEngine.active = true;
-    window.__scrollActive = true;
-    scrollEngine.raf = requestAnimationFrame(stepScroll);
-  }
-
-  window.addEventListener('scroll', function(){
-    if(document.body.classList.contains('has-virtual-scroll') && !reduceMotion){
-      window.__virtualScrollY = scrollEngine.currentY;
-      return;
-    }
-    if(scrollEngine.active) return;
-    scrollEngine.currentY = window.pageYOffset || 0;
-    scrollEngine.targetY = scrollEngine.currentY;
-    window.__virtualScrollY = scrollEngine.currentY;
-  }, {passive:true});
-
-  function animateTo(targetY){
-    scrollEngine.targetY = clamp(targetY, 0, maxScroll());
-    window.__scrollTargetY = scrollEngine.targetY;
-    startScroll();
-  }
-
-  function scrollToAnchor(el){
-    var offset = 112;
-    var currentY = window.__virtualScrollY || 0;
-    var targetY = currentY + el.getBoundingClientRect().top - offset;
-    animateTo(targetY);
-  }
-
-  function getSections(){
-    var flow = getPageFlow();
-    if(!flow) return [];
-    var nodes = flow.querySelectorAll('.hero, .scroll-block');
-    var list = [];
-    var y = getScrollPos();
-    for(var i=0;i<nodes.length;i++){
-      list.push({el: nodes[i], top: nodes[i].getBoundingClientRect().top + y});
-    }
-    return list;
-  }
-
-  function findSectionIndex(sections, y){
-    var best = 0;
-    for(var i=0;i<sections.length;i++){
-      if(sections[i].top <= y + 60) best = i;
-    }
-    return best;
-  }
-
-  function snapSection(dir){
-    if(scrollEngine.active) return;
-    var sections = getSections();
-    if(!sections.length) return;
-    var idx = findSectionIndex(sections, getScrollPos());
-    var next = clamp(idx + dir, 0, sections.length - 1);
-    if(next === idx) return;
-    animateTo(sections[next].top);
-  }
-
-  var nativeAnim = { raf: 0 };
-  function animateNativeTo(targetY){
-    targetY = clamp(targetY, 0, maxScroll());
-    var startY = (window.pageYOffset || 0);
-    var delta = targetY - startY;
-    if(Math.abs(delta) < 1){
-      window.scrollTo(0, targetY);
-      window.__nativeAnimating = false;
-      return;
-    }
-    var duration = clamp(Math.abs(delta) * 0.5, 500, 1500);
-    var start = performance.now();
-    window.__nativeAnimating = true;
-    if(nativeAnim.raf) cancelAnimationFrame(nativeAnim.raf);
-    function frame(now){
-      var t = clamp((now - start) / duration, 0, 1);
-      var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      window.scrollTo(0, startY + delta * e);
-      if(t < 1){
-        nativeAnim.raf = requestAnimationFrame(frame);
-      } else {
-        window.__nativeAnimating = false;
-        nativeAnim.raf = 0;
-      }
-    }
-    nativeAnim.raf = requestAnimationFrame(frame);
-  }
-
-  if(finePointer && !reduceMotion){
-    window.__scrollMode = 'virtual-snap';
-    document.documentElement.classList.add('has-virtual-scroll');
-    document.body.classList.add('has-virtual-scroll');
-    scrollEngine.currentY = 0;
-    scrollEngine.targetY = 0;
-    syncVirtualScroll();
-
-    window.addEventListener('wheel', function(e){
-      if(e.ctrlKey) return;
-
-      if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
-        return;
-      }
-
-      var delta = e.deltaY || 0;
-      if(!delta) return;
-
-      e.preventDefault();
-
-      if(scrollEngine.active) return;
-      if(Math.abs(delta) < 5) return;
-
-      snapSection(delta > 0 ? 1 : -1);
-    }, {passive:false});
-
-    window.addEventListener('keydown', function(e){
-      if(e.metaKey || e.ctrlKey || e.altKey) return;
-      if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
-        return;
-      }
-
-      var handled = true;
-
-      switch(e.key){
-        case 'ArrowDown':
-        case 'PageDown':
-        case ' ':
-          snapSection(1);
-          break;
-        case 'ArrowUp':
-        case 'PageUp':
-          snapSection(-1);
-          break;
-        case 'Home':
-          animateTo(0);
-          break;
-        case 'End':
-          animateTo(maxScroll());
-          break;
-        default:
-          handled = false;
-      }
-
-      if(handled) e.preventDefault();
-    });
-  }
-
-  window.addEventListener('wheel', function(e){
-    if(document.body.classList.contains('has-virtual-scroll')) return;
-
-    if(e.ctrlKey) return;
-    if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
-      return;
-    }
-
-    var delta = e.deltaY || 0;
-    if(!delta) return;
-    e.preventDefault();
-
-    if(Math.abs(delta) < 5) return;
-    var now = Date.now();
-    if(now - lastNativeSnap < 700) return;
-
-    var sections = getSections();
-    if(!sections.length) return;
-    var idx = findSectionIndex(sections, getScrollPos());
-    var next = clamp(idx + (delta > 0 ? 1 : -1), 0, sections.length - 1);
-    if(next === idx) return;
-
-    lastNativeSnap = now;
-    animateNativeTo(sections[next].top);
-  }, {passive:false});
-
-  window.addEventListener('keydown', function(e){
-    if(document.body.classList.contains('has-virtual-scroll')) return;
-
-    if(e.metaKey || e.ctrlKey || e.altKey) return;
-    if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
-      return;
-    }
-
-    var handled = true;
-    var dir = 0;
-    switch(e.key){
-      case 'ArrowDown':
-      case 'PageDown':
-      case ' ':
-        dir = 1;
-        break;
-      case 'ArrowUp':
-      case 'PageUp':
-        dir = -1;
-        break;
-      case 'Home':
-        animateNativeTo(0);
-        break;
-      case 'End':
-        animateNativeTo(maxScroll());
-        break;
-      default:
-        handled = false;
-    }
-
-    if(dir){
-      var sections = getSections();
-      if(sections.length){
-        var idx = findSectionIndex(sections, getScrollPos());
-        var next = clamp(idx + dir, 0, sections.length - 1);
-        if(next !== idx){
-          animateNativeTo(sections[next].top);
-        }
-      }
-    }
-
-    if(handled) e.preventDefault();
-  });
-
-  if(!document.body.classList.contains('has-virtual-scroll')){
-    window.__scrollMode = reduceMotion ? 'native-snap-reduced' : 'native-snap';
-  }
-
   document.addEventListener('click', function(e){
     var a = e.target.closest('a[href^="#"]');
     if(!a) return;
@@ -327,11 +42,7 @@
     var id = a.getAttribute('href').slice(1);
     var el = document.getElementById(id);
     if(!el) return;
-    if(document.body.classList.contains('has-virtual-scroll')){
-      scrollToAnchor(el);
-    } else {
-      el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
-    }
+    el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
   });
 })();
 </script>
@@ -664,7 +375,7 @@ function About() {
     className: "section-head"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "Sobre a Marca"), /*#__PURE__*/React.createElement("h2", null, "Nascemos para elevar o padrão", /*#__PURE__*/React.createElement("br", null), "do mercado de reposição automotiva.")), /*#__PURE__*/React.createElement("div", {
+  }, "Sobre a Marca"), /*#__PURE__*/React.createElement("h2", null, "Nascemos para elevar o padrão do", /*#__PURE__*/React.createElement("br", null), "mercado de ", /*#__PURE__*/React.createElement("em", null, "reposição automotiva"), ".")), /*#__PURE__*/React.createElement("div", {
     className: "about-grid"
   }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
     className: "about-card"
@@ -720,7 +431,7 @@ function ProductStory() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "Engenharia em Foco"), /*#__PURE__*/React.createElement("h2", null, "Bomba de combustível", /*#__PURE__*/React.createElement("br", null), "de alta performance."), /*#__PURE__*/React.createElement("p", null, "Bomba de combustível de precisão, projetada para fluxo constante e pressão controlada — garantindo alimentação eficiente em qualquer condição de uso severo."))), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Engenharia em Foco"), /*#__PURE__*/React.createElement("h2", null, "Bombas de combustível", /*#__PURE__*/React.createElement("br", null), "de ", /*#__PURE__*/React.createElement("em", null, "alta performance"), "."), /*#__PURE__*/React.createElement("p", null, "Bomba de combustível de precisão, projetada para fluxo constante e pressão controlada — garantindo alimentação eficiente em qualquer condição de uso severo."))), /*#__PURE__*/React.createElement(Reveal, {
     delay: 100
   }, /*#__PURE__*/React.createElement(ProductStage, null)), /*#__PURE__*/React.createElement(Reveal, {
     delay: 200
@@ -878,7 +589,7 @@ function Pillars() {
     className: "section-head"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "Por que Forschen"), /*#__PURE__*/React.createElement("h2", null, "Padrões que sustentam", /*#__PURE__*/React.createElement("br", null), "cada componente.")), /*#__PURE__*/React.createElement("div", {
+  }, "Por que Forschen"), /*#__PURE__*/React.createElement("h2", null, "Padrões que sustentam", /*#__PURE__*/React.createElement("br", null), "cada ", /*#__PURE__*/React.createElement("em", null, "componente"), ".")), /*#__PURE__*/React.createElement("div", {
     className: "pillar-grid"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "0",
@@ -926,7 +637,7 @@ function Values() {
     className: "section-head"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "Compromisso"), /*#__PURE__*/React.createElement("h2", null, "Qualidade, precisão", /*#__PURE__*/React.createElement("br", null), "e confiabilidade."))), /*#__PURE__*/React.createElement("div", {
+  }, "Compromisso"), /*#__PURE__*/React.createElement("h2", null, "Qualidade, precisão", /*#__PURE__*/React.createElement("br", null), "e ", /*#__PURE__*/React.createElement("em", null, "confiabilidade"), "."))), /*#__PURE__*/React.createElement("div", {
     className: "wrap",
     style: {
       padding: 0,
@@ -994,7 +705,7 @@ function Distribution() {
     className: "section-head"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "Distribuição"), /*#__PURE__*/React.createElement("h2", null, "Onde encontrar", /*#__PURE__*/React.createElement("br", null), "os produtos FORSCHEN."), /*#__PURE__*/React.createElement("p", null, "A FORSCHEN conta com parceiros estratégicos em diversos mercados. No Brasil, a distribuição oficial é realizada pela Starke Parts, responsável pela comercialização, suporte comercial e atendimento da marca no território nacional, principalmente na região Sudeste.")), /*#__PURE__*/React.createElement("div", {
+  }, "Distribuição"), /*#__PURE__*/React.createElement("h2", null, "Onde encontrar", /*#__PURE__*/React.createElement("br", null), "os produtos ", /*#__PURE__*/React.createElement("em", null, "FORSCHEN"), "."), /*#__PURE__*/React.createElement("p", null, "A FORSCHEN conta com parceiros estratégicos em diversos mercados. No Brasil, a distribuição oficial é realizada pela Starke Parts, responsável pela comercialização, suporte comercial e atendimento da marca no território nacional, principalmente na região Sudeste.")), /*#__PURE__*/React.createElement("div", {
     className: "dist-grid"
   }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
     className: "dist-card"
@@ -1412,6 +1123,24 @@ function CustomCursor() {
     r: "2.5"
   }))));
 }
+function WhatsAppFloat() {
+  const url = 'https://wa.me/5511952063102?text=' + encodeURIComponent('Olá! Gostaria de mais informações sobre os produtos FORSCHEN.');
+  return /*#__PURE__*/React.createElement("a", {
+    className: "whatsapp-float",
+    href: url,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    "aria-label": "WhatsApp"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "26",
+    height: "26",
+    viewBox: "0 0 24 24",
+    fill: "currentColor",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+  })));
+}
 function App() {
   const [introDone, setIntroDone] = useState(false);
   const [videoDone, setVideoDone] = useState(false);
@@ -1482,7 +1211,7 @@ function App() {
     className: "grain"
   }), /*#__PURE__*/React.createElement("div", {
     className: "vignette"
-  }), /*#__PURE__*/React.createElement(CustomCursor, null), /*#__PURE__*/React.createElement(ProgressBar, null), /*#__PURE__*/React.createElement(Particles, null), /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement("main", {
+  }), /*#__PURE__*/React.createElement(CustomCursor, null), /*#__PURE__*/React.createElement(ProgressBar, null), /*#__PURE__*/React.createElement(WhatsAppFloat, null), /*#__PURE__*/React.createElement(Particles, null), /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement("main", {
     className: "page-flow"
   }, /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(ProductStory, null), /*#__PURE__*/React.createElement(Pillars, null), /*#__PURE__*/React.createElement(Values, null), /*#__PURE__*/React.createElement(Warranty, null), /*#__PURE__*/React.createElement(Distribution, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Footer, null)));
 }
