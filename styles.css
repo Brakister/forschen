@@ -125,7 +125,7 @@ nav.links a{transition:color .25s;color:var(--green-light);} nav.links a:hover{c
 .btn-primary,.btn-ghost,.nav-cta{border-radius:10px;}
 .about-card,.dist-card,.value-item{border-radius:18px;}
 
-.hero-object{position:absolute;right:2%;top:50%;width:min(42vw,560px);z-index:1;opacity:0;
+.hero-object{position:absolute;right:2%;top:50%;width:min(30vw,410px);z-index:1;opacity:0;
   filter:drop-shadow(0 0 12px rgba(46,125,50,.35));will-change:transform;}
 .hero-object .hero-canvas{width:100%;height:auto;display:block;border:none;outline:none;background:transparent;}
 .hero-object .hero-bomba{animation:hero-float 4s ease-in-out infinite;}

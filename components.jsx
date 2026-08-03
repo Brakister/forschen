@@ -132,8 +132,26 @@ function HeroObject(){
       ctx.drawImage(img, 0, 0, w, h);
       try {
         const data = ctx.getImageData(0, 0, w, h), d = data.data;
-        for(let i=0;i<d.length;i+=4){
-          if(d[i]>230 && d[i+1]>230 && d[i+2]>230) d[i+3]=0;
+        const N = w * h, bg = new Uint8Array(N), stack = new Int32Array(N);
+        let sp = 0;
+        const white = i => d[i*4] > 240 && d[i*4+1] > 240 && d[i*4+2] > 240;
+        const seed = i => { if(!bg[i] && white(i)){ bg[i]=1; stack[sp++]=i; } };
+        for(let y=0;y<h;y++){ seed(y*w); seed(y*w+w-1); }
+        for(let x=0;x<w;x++){ seed(x); seed((h-1)*w+x); }
+        while(sp>0){
+          const i = stack[--sp], x = i%w, y = (i/w)|0;
+          if(x>0) seed(i-1);
+          if(x<w-1) seed(i+1);
+          if(y>0) seed(i-w);
+          if(y<h-1) seed(i+w);
+        }
+        for(let i=0;i<N;i++){
+          if(bg[i]){ d[i*4+3]=0; continue; }
+          const x=i%w, y=(i/w)|0;
+          if((x>0&&bg[i-1])||(x<w-1&&bg[i+1])||(y>0&&bg[i-w])||(y<h-1&&bg[i+w])){
+            const m = Math.max(d[i*4], d[i*4+1], d[i*4+2]);
+            d[i*4+3] = Math.max(0, Math.min(255, (255-m)*5));
+          }
         }
         ctx.putImageData(data, 0, 0);
       } catch(err){}
