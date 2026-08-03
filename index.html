@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORSCHEN Automotive | Premium Aftermarket Auto Parts</title>
+<meta name="description" content="FORSCHEN Automotive desenvolve componentes automotivos premium para o mercado de reposição (Aftermarket), com engenharia europeia, qualidade, precisão e confiabilidade. Distribuição oficial no Brasil pela Starke Parts.">
+<meta name="keywords" content="FORSCHEN, Forschen Auto Parts, Aftermarket Auto Parts, Premium Auto Parts, Auto Parts Manufacturer, Automotive Components, OEM Replacement Parts, European Auto Parts, marca de peças automotivas, peças importadas, peças premium, peças BMW, peças Mercedes, peças Audi, peças Porsche, peças Land Rover, fornecedor de autopeças, fabricante de autopeças, aftermarket premium, peças OEM">
+<meta name="author" content="FORSCHEN Automotive">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FORSCHEN Automotive">
+<meta property="og:title" content="FORSCHEN Automotive | Premium Aftermarket Auto Parts">
+<meta property="og:description" content="FORSCHEN Automotive desenvolve componentes automotivos premium para o mercado de reposição, com rigor de engenharia europeia. Distribuição oficial no Brasil pela Starke Parts.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FORSCHEN Automotive | Premium Aftermarket Auto Parts">
+<meta name="twitter:description" content="Componentes automotivos premium para o aftermarket, com qualidade, precisão e confiabilidade. Distribuição oficial no Brasil pela Starke Parts.">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&f[]=jetbrains-mono@400,500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "FORSCHEN Automotive",
+  "description": "Marca internacional especializada no desenvolvimento e fornecimento de componentes automotivos para o mercado de reposição (Aftermarket), focada em qualidade, precisão e confiabilidade.",
+  "areaServed": "BR",
+  "sameAs": ["https://www.instagram.com/forschenbrasil/"]
+}
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function(){
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  var pageFlow = null;
+  var maxScroll = function(){
+    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  };
+
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+  var scrollEngine = {
+    raf: 0,
+    currentY: window.pageYOffset || 0,
+    targetY: window.pageYOffset || 0,
+    velocity: 0,
+    active: false
+  };
+  var lastNativeSnap = 0;
+
+  function getScrollPos(){
+    if(document.body.classList.contains('has-virtual-scroll')){
+      return window.__virtualScrollY || 0;
+    }
+    return window.pageYOffset || 0;
+  }
+
+  function getPageFlow(){
+    if(pageFlow && pageFlow.isConnected) return pageFlow;
+    pageFlow = document.querySelector('.page-flow');
+    return pageFlow;
+  }
+
+  function syncVirtualScroll(){
+    var flow = getPageFlow();
+    if(flow){
+      flow.style.transform = 'translate3d(0,' + (-scrollEngine.currentY) + 'px,0)';
+    }
+    window.__virtualScrollY = scrollEngine.currentY;
+    window.dispatchEvent(new Event('scroll'));
+  }
+
+  function stepScroll(){
+    var delta = scrollEngine.targetY - scrollEngine.currentY;
+    scrollEngine.velocity += delta * 0.085;
+    scrollEngine.velocity *= 0.82;
+    scrollEngine.currentY += scrollEngine.velocity;
+
+    if(Math.abs(delta) < 0.45 && Math.abs(scrollEngine.velocity) < 0.45){
+      scrollEngine.currentY = scrollEngine.targetY;
+      scrollEngine.velocity = 0;
+      scrollEngine.active = false;
+      scrollEngine.raf = 0;
+      window.__scrollActive = false;
+      syncVirtualScroll();
+      return;
+    }
+
+    syncVirtualScroll();
+    scrollEngine.raf = requestAnimationFrame(stepScroll);
+  }
+
+  function startScroll(){
+    if(reduceMotion){
+      scrollEngine.currentY = scrollEngine.targetY;
+      syncVirtualScroll();
+      window.__scrollActive = false;
+      return;
+    }
+    if(scrollEngine.raf) return;
+    scrollEngine.active = true;
+    window.__scrollActive = true;
+    scrollEngine.raf = requestAnimationFrame(stepScroll);
+  }
+
+  window.addEventListener('scroll', function(){
+    if(document.body.classList.contains('has-virtual-scroll') && !reduceMotion){
+      window.__virtualScrollY = scrollEngine.currentY;
+      return;
+    }
+    if(scrollEngine.active) return;
+    scrollEngine.currentY = window.pageYOffset || 0;
+    scrollEngine.targetY = scrollEngine.currentY;
+    window.__virtualScrollY = scrollEngine.currentY;
+  }, {passive:true});
+
+  function animateTo(targetY){
+    scrollEngine.targetY = clamp(targetY, 0, maxScroll());
+    window.__scrollTargetY = scrollEngine.targetY;
+    startScroll();
+  }
+
+  function scrollToAnchor(el){
+    var offset = 112;
+    var currentY = window.__virtualScrollY || 0;
+    var targetY = currentY + el.getBoundingClientRect().top - offset;
+    animateTo(targetY);
+  }
+
+  function getSections(){
+    var flow = getPageFlow();
+    if(!flow) return [];
+    var nodes = flow.querySelectorAll('.hero, .scroll-block');
+    var list = [];
+    var y = getScrollPos();
+    for(var i=0;i<nodes.length;i++){
+      list.push({el: nodes[i], top: nodes[i].getBoundingClientRect().top + y});
+    }
+    return list;
+  }
+
+  function findSectionIndex(sections, y){
+    var best = 0;
+    for(var i=0;i<sections.length;i++){
+      if(sections[i].top <= y + 60) best = i;
+    }
+    return best;
+  }
+
+  function snapSection(dir){
+    if(scrollEngine.active) return;
+    var sections = getSections();
+    if(!sections.length) return;
+    var idx = findSectionIndex(sections, getScrollPos());
+    var next = clamp(idx + dir, 0, sections.length - 1);
+    if(next === idx) return;
+    animateTo(sections[next].top);
+  }
+
+  var nativeAnim = { raf: 0 };
+  function animateNativeTo(targetY){
+    targetY = clamp(targetY, 0, maxScroll());
+    var startY = (window.pageYOffset || 0);
+    var delta = targetY - startY;
+    if(Math.abs(delta) < 1){
+      window.scrollTo(0, targetY);
+      window.__nativeAnimating = false;
+      return;
+    }
+    var duration = clamp(Math.abs(delta) * 0.5, 500, 1500);
+    var start = performance.now();
+    window.__nativeAnimating = true;
+    if(nativeAnim.raf) cancelAnimationFrame(nativeAnim.raf);
+    function frame(now){
+      var t = clamp((now - start) / duration, 0, 1);
+      var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      window.scrollTo(0, startY + delta * e);
+      if(t < 1){
+        nativeAnim.raf = requestAnimationFrame(frame);
+      } else {
+        window.__nativeAnimating = false;
+        nativeAnim.raf = 0;
+      }
+    }
+    nativeAnim.raf = requestAnimationFrame(frame);
+  }
+
+  if(finePointer && !reduceMotion){
+    window.__scrollMode = 'virtual-snap';
+    document.documentElement.classList.add('has-virtual-scroll');
+    document.body.classList.add('has-virtual-scroll');
+    scrollEngine.currentY = 0;
+    scrollEngine.targetY = 0;
+    syncVirtualScroll();
+
+    window.addEventListener('wheel', function(e){
+      if(e.ctrlKey) return;
+
+      if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
+        return;
+      }
+
+      var delta = e.deltaY || 0;
+      if(!delta) return;
+
+      e.preventDefault();
+
+      if(scrollEngine.active) return;
+      if(Math.abs(delta) < 5) return;
+
+      snapSection(delta > 0 ? 1 : -1);
+    }, {passive:false});
+
+    window.addEventListener('keydown', function(e){
+      if(e.metaKey || e.ctrlKey || e.altKey) return;
+      if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
+        return;
+      }
+
+      var handled = true;
+
+      switch(e.key){
+        case 'ArrowDown':
+        case 'PageDown':
+        case ' ':
+          snapSection(1);
+          break;
+        case 'ArrowUp':
+        case 'PageUp':
+          snapSection(-1);
+          break;
+        case 'Home':
+          animateTo(0);
+          break;
+        case 'End':
+          animateTo(maxScroll());
+          break;
+        default:
+          handled = false;
+      }
+
+      if(handled) e.preventDefault();
+    });
+  }
+
+  window.addEventListener('wheel', function(e){
+    if(document.body.classList.contains('has-virtual-scroll')) return;
+
+    if(e.ctrlKey) return;
+    if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
+      return;
+    }
+
+    var delta = e.deltaY || 0;
+    if(!delta) return;
+    e.preventDefault();
+
+    if(Math.abs(delta) < 5) return;
+    var now = Date.now();
+    if(now - lastNativeSnap < 700) return;
+
+    var sections = getSections();
+    if(!sections.length) return;
+    var idx = findSectionIndex(sections, getScrollPos());
+    var next = clamp(idx + (delta > 0 ? 1 : -1), 0, sections.length - 1);
+    if(next === idx) return;
+
+    lastNativeSnap = now;
+    animateNativeTo(sections[next].top);
+  }, {passive:false});
+
+  window.addEventListener('keydown', function(e){
+    if(document.body.classList.contains('has-virtual-scroll')) return;
+
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && e.target.closest && e.target.closest('textarea,input,select,[contenteditable="true"],[contenteditable="plaintext-only"]')){
+      return;
+    }
+
+    var handled = true;
+    var dir = 0;
+    switch(e.key){
+      case 'ArrowDown':
+      case 'PageDown':
+      case ' ':
+        dir = 1;
+        break;
+      case 'ArrowUp':
+      case 'PageUp':
+        dir = -1;
+        break;
+      case 'Home':
+        animateNativeTo(0);
+        break;
+      case 'End':
+        animateNativeTo(maxScroll());
+        break;
+      default:
+        handled = false;
+    }
+
+    if(dir){
+      var sections = getSections();
+      if(sections.length){
+        var idx = findSectionIndex(sections, getScrollPos());
+        var next = clamp(idx + dir, 0, sections.length - 1);
+        if(next !== idx){
+          animateNativeTo(sections[next].top);
+        }
+      }
+    }
+
+    if(handled) e.preventDefault();
+  });
+
+  if(!document.body.classList.contains('has-virtual-scroll')){
+    window.__scrollMode = reduceMotion ? 'native-snap-reduced' : 'native-snap';
+  }
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if(!a) return;
+    e.preventDefault();
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(document.body.classList.contains('has-virtual-scroll')){
+      scrollToAnchor(el);
+    } else {
+      el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
+    }
+  });
+})();
+</script>
+<script src="vendor/react.production.min.js"></script>
+<script src="vendor/react-dom.production.min.js"></script>
+<script src="vendor/anime.min.js"></script>
+<script>
+const {
+  useEffect,
+  useRef,
+  useState
+} = React;
+function useReveal(ref, delay = 0) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          anime({
+            targets: entry.target,
+            opacity: [0, 1],
+            translateY: [36, 0],
+            easing: 'cubicBezier(.16,.8,.24,1)',
+            duration: 1000,
+            delay: delay
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: .15
+    });
+    io.observe(el);
+  }, []);
+}
+function Reveal({
+  children,
+  delay = 0,
+  style,
+  className = ''
+}) {
+  const ref = useRef(null);
+  useReveal(ref, delay);
+  return /*#__PURE__*/React.createElement("div", {
+    ref: ref,
+    className: "reveal " + className,
+    style: style
+  }, children);
+}
+function TitleCard({
+  onDone
+}) {
+  useEffect(() => {
+    const tl = anime.timeline({
+      easing: 'cubicBezier(.16,.8,.24,1)'
+    });
+    tl.add({
+      targets: '.tc-eyebrow',
+      opacity: [0, 1],
+      translateY: [10, 0],
+      duration: 700
+    }).add({
+      targets: '.tc-title',
+      opacity: [0, 1],
+      letterSpacing: ['.5em', '.04em'],
+      duration: 1100
+    }, '-=300').add({
+      targets: '.letterbox.top',
+      translateY: ['0%', '-100%'],
+      duration: 900,
+      easing: 'easeInOutCubic'
+    }, '+=550').add({
+      targets: '.letterbox.bottom',
+      translateY: ['0%', '100%'],
+      duration: 900,
+      easing: 'easeInOutCubic'
+    }, '-=900').add({
+      targets: '.titlecard',
+      opacity: [1, 0],
+      duration: 500,
+      complete: onDone
+    }, '-=400');
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "titlecard"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tc-eyebrow"
+  }, "Apresentamos"), /*#__PURE__*/React.createElement("h1", {
+    className: "tc-title"
+  }, "FORSCHEN"));
+}
+function IntroVideo({
+  onDone
+}) {
+  useEffect(() => {
+    anime({
+      targets: '.intro-video',
+      opacity: [0, 1],
+      duration: 1200,
+      easing: 'easeOutQuad'
+    });
+    const timer = setTimeout(() => {
+      anime({
+        targets: '.intro-video',
+        opacity: [1, 0],
+        duration: 800,
+        easing: 'easeInOutCubic',
+        complete: onDone
+      });
+    }, 3800);
+    return () => clearTimeout(timer);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "intro-video"
+  }, /*#__PURE__*/React.createElement("video", {
+    autoPlay: true,
+    muted: true,
+    playsInline: true,
+    style: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover'
+    }
+  }, /*#__PURE__*/React.createElement("source", {
+    src: "bombacinne.mp4",
+    type: "video/mp4"
+  })));
+}
+function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const getScrollY = () => window.__virtualScrollY ?? window.scrollY ?? 0;
+    const onScroll = () => setScrolled(getScrollY() > 40);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return /*#__PURE__*/React.createElement("header", {
+    className: scrolled ? 'scrolled' : ''
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "logo"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "logo-mark"
+  }), "FORSCHEN"), /*#__PURE__*/React.createElement("nav", {
+    className: "links" + (open ? ' mobile-open' : ''),
+    onClick: () => setOpen(false)
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#sobre"
+  }, "Sobre"), /*#__PURE__*/React.createElement("a", {
+    href: "#engenharia"
+  }, "Engenharia"), /*#__PURE__*/React.createElement("a", {
+    href: "#garantia"
+  }, "Garantia"), /*#__PURE__*/React.createElement("a", {
+    href: "#faq"
+  }, "FAQ"), /*#__PURE__*/React.createElement("a", {
+    href: "#contato"
+  }, "Contato")), /*#__PURE__*/React.createElement("div", {
+    className: "header-right"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "https://www.instagram.com/forschenbrasil/",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    "aria-label": "Instagram",
+    className: "header-ig"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "2",
+    y: "2",
+    width: "20",
+    height: "20",
+    rx: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17.5",
+    cy: "6.5",
+    r: "1",
+    fill: "currentColor",
+    stroke: "none"
+  }))), /*#__PURE__*/React.createElement("a", {
+    href: "#contato",
+    className: "nav-cta",
+    onClick: () => setOpen(false)
+  }, "Solicitar Orçamento"), /*#__PURE__*/React.createElement("button", {
+    className: "nav-burger",
+    "aria-label": "Menu",
+    "aria-expanded": open,
+    onClick: () => setOpen(!open)
+  }, /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null))));
+}
+function HeroObject() {
+  const objRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+    var ctx = canvas.getContext('2d');
+    var frameId;
+    function process() {
+      if (video.paused || video.ended || !video.videoWidth) return;
+      var s = 0.35,
+        w = Math.round(video.videoWidth * s),
+        h = Math.round(video.videoHeight * s);
+      if (canvas.width !== w) canvas.width = w;
+      if (canvas.height !== h) canvas.height = h;
+      try {
+        ctx.drawImage(video, 0, 0, w, h);
+        var img = ctx.getImageData(0, 0, w, h),
+          d = img.data;
+        for (var i = 0; i < d.length; i += 4) {
+          if (d[i + 1] > d[i] * 1.3 && d[i + 1] > d[i + 2] * 1.3 && d[i + 1] > 50) d[i + 3] = 0;
+        }
+        ctx.putImageData(img, 0, 0);
+      } catch (err) {
+        canvas.style.display = 'none';
+        video.style.opacity = 1;
+        return;
+      }
+      frameId = requestAnimationFrame(process);
+    }
+    function start() {
+      process();
+    }
+    video.addEventListener('play', start);
+    if (video.readyState > 1 && !video.paused) process();
+    return function () {
+      cancelAnimationFrame(frameId);
+      video.removeEventListener('play', start);
+    };
+  }, []);
+  useEffect(() => {
+    const onMove = e => {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      const x = (e.clientX / window.innerWidth - .5) * 18;
+      const y = (e.clientY / window.innerHeight - .5) * 14;
+      if (objRef.current) {
+        objRef.current.style.transform = `translateY(-46%) translate(${x}px, ${y}px) rotate(${x * 0.15}deg)`;
+      }
+    };
+    window.addEventListener('mousemove', onMove);
+    anime({
+      targets: '.sweep',
+      translateX: ['0%', '560%'],
+      duration: 3400,
+      delay: 2200,
+      easing: 'easeInOutSine',
+      loop: true,
+      direction: 'alternate'
+    });
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "hero-object",
+    ref: objRef,
+    id: "heroObj"
+  }, /*#__PURE__*/React.createElement("video", {
+    ref: videoRef,
+    autoPlay: true,
+    loop: true,
+    muted: true,
+    playsInline: true,
+    style: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      opacity: 0,
+      pointerEvents: 'none'
+    }
+  }, /*#__PURE__*/React.createElement("source", {
+    src: "pump.mp4",
+    type: "video/mp4"
+  })), /*#__PURE__*/React.createElement("canvas", {
+    ref: canvasRef,
+    className: "hero-canvas"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "sweep"
+  }));
+}
+function Hero() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "hero"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hero-grid-lines"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "hero-inner"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow",
+    id: "heroEyebrow"
+  }, "Aftermarket · Componentes de Performance"), /*#__PURE__*/React.createElement("h1", {
+    id: "heroTitle"
+  }, "Precisão que se sente", /*#__PURE__*/React.createElement("br", null), "ao ", /*#__PURE__*/React.createElement("em", null, "girar a chave.")), /*#__PURE__*/React.createElement("p", {
+    className: "hero-sub",
+    id: "heroSub"
+  }, "A FORSCHEN é uma marca internacional especializada no desenvolvimento e fornecimento de componentes automotivos para o mercado de reposição (Aftermarket) — focada em qualidade, precisão e confiabilidade."), /*#__PURE__*/React.createElement("div", {
+    className: "hero-ctas",
+    id: "heroCtas"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#engenharia",
+    className: "btn-primary"
+  }, "Explorar Componentes →"), /*#__PURE__*/React.createElement("a", {
+    href: "#contato",
+    className: "btn-ghost"
+  }, "Solicitar Orçamento"))), /*#__PURE__*/React.createElement(HeroObject, null), /*#__PURE__*/React.createElement("div", {
+    className: "scroll-cue",
+    id: "scrollCue"
+  }, /*#__PURE__*/React.createElement("span", null, "Role para explorar"), /*#__PURE__*/React.createElement("span", {
+    className: "line"
+  })));
+}
+function About() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "about scroll-block",
+    id: "sobre"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Sobre a Marca"), /*#__PURE__*/React.createElement("h2", null, "Nascemos para elevar o padrão", /*#__PURE__*/React.createElement("br", null), "do mercado de reposição automotiva.")), /*#__PURE__*/React.createElement("div", {
+    className: "about-grid"
+  }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
+    className: "about-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tag"
+  }, "Quem Somos"), /*#__PURE__*/React.createElement("h3", null, "Um propósito claro: elevar o padrão."), /*#__PURE__*/React.createElement("p", null, "A FORSCHEN nasceu com um propósito claro: elevar o padrão do mercado de reposição automotiva através de componentes desenvolvidos com rigor técnico, processos industriais avançados e controle de qualidade em cada etapa da produção. Com atuação no mercado brasileiro, fornecemos soluções para distribuidores, oficinas especializadas e profissionais que exigem desempenho, segurança e durabilidade."), /*#__PURE__*/React.createElement("p", null, "Nosso compromisso vai além da fabricação de peças: entregamos confiança."))), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 120
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "about-card dark"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tag"
+  }, "Nossa Missão"), /*#__PURE__*/React.createElement("h3", null, "Segurança, desempenho e custo-benefício."), /*#__PURE__*/React.createElement("p", null, "Desenvolver componentes automotivos confiáveis que proporcionem segurança, desempenho e excelente custo-benefício para o mercado nacional. Toda peça FORSCHEN passa por rigorosos processos de inspeção, testes dimensionais e validações funcionais antes de chegar ao mercado."), /*#__PURE__*/React.createElement("p", null, "Os processos de fabricação seguem padrões internacionais de qualidade e são realizados em unidades industriais especializadas, garantindo confiabilidade e desempenho consistente."))))));
+}
+function ProductStage() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "product-stage product-stage-video"
+  }, /*#__PURE__*/React.createElement("video", {
+    autoPlay: true,
+    loop: true,
+    muted: true,
+    playsInline: true,
+    style: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      borderRadius: 4
+    }
+  }, /*#__PURE__*/React.createElement("source", {
+    src: "pumpcommer.mp4",
+    type: "video/mp4"
+  })));
+}
+function ProductStory() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "product scroll-block",
+    id: "engenharia"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "product-top",
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      gap: 40,
+      marginBottom: 64,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "section-head",
+    style: {
+      marginBottom: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Engenharia em Foco"), /*#__PURE__*/React.createElement("h2", null, "Bomba de combustível", /*#__PURE__*/React.createElement("br", null), "de alta performance."), /*#__PURE__*/React.createElement("p", null, "Bomba de combustível de precisão, projetada para fluxo constante e pressão controlada — garantindo alimentação eficiente em qualquer condição de uso severo."))), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 100
+  }, /*#__PURE__*/React.createElement(ProductStage, null)), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 200
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "spec-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "spec-cell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "k"
+  }, "Fluxo"), /*#__PURE__*/React.createElement("div", {
+    className: "v"
+  }, "340 l/h")), /*#__PURE__*/React.createElement("div", {
+    className: "spec-cell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "k"
+  }, "Pressão"), /*#__PURE__*/React.createElement("div", {
+    className: "v"
+  }, "3.0 bar")), /*#__PURE__*/React.createElement("div", {
+    className: "spec-cell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "k"
+  }, "Tolerância"), /*#__PURE__*/React.createElement("div", {
+    className: "v"
+  }, "±0.02mm")), /*#__PURE__*/React.createElement("div", {
+    className: "spec-cell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "k"
+  }, "Acabamento"), /*#__PURE__*/React.createElement("div", {
+    className: "v"
+  }, "Anodizado"))))));
+}
+const PILLAR_ICON = children => /*#__PURE__*/React.createElement("svg", {
+  width: "34",
+  height: "34",
+  viewBox: "0 0 34 34",
+  fill: "none",
+  stroke: "url(#pillarGrad)",
+  strokeWidth: "1.4",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}, children);
+const PILLARS = [{
+  icon: PILLAR_ICON(/*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
+    d: "M17 7 V9 M27 17 H25 M7 17 H9 M17 25 V27"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17",
+    cy: "17",
+    r: "10"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 17 L22 12",
+    stroke: "#F3E500"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17",
+    cy: "17",
+    r: "1.4",
+    fill: "#F3E500",
+    stroke: "none"
+  }))),
+  title: 'Engenharia de precisão',
+  text: 'Especificações validadas em tolerâncias milimétricas antes de qualquer componente entrar em catálogo.'
+}, {
+  icon: PILLAR_ICON(/*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
+    d: "M13 6 h8 v9 l5.5 10 a2.5 2.5 0 0 1 -2.2 3 H9.7 a2.5 2.5 0 0 1 -2.2 -3 L13 15 Z"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "10.5",
+    y1: "22",
+    x2: "23.5",
+    y2: "22",
+    stroke: "#2E7D32"
+  }))),
+  title: 'Materiais selecionados',
+  text: 'Ligas e compostos escolhidos pela resposta ao estresse térmico e mecânico, não pelo menor custo.'
+}, {
+  icon: PILLAR_ICON(/*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
+    d: "M17 4 L28 9 v8 c0 7 -4.6 10.8 -11 13 C10.6 27.8 6 24 6 17 V9 Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M12.5 16.5 L16 20 L22.5 13",
+    stroke: "#F3E500"
+  }))),
+  title: 'Durabilidade real',
+  text: 'Testado sob condições de uso contínuo — não apenas em laboratório, mas na estrada.'
+}, {
+  icon: PILLAR_ICON(/*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("polygon", {
+    points: "17,5 25,9.7 25,18.3 17,23 9,18.3 9,9.7"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17",
+    cy: "14",
+    r: "2.6"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "13",
+    y1: "27",
+    x2: "21",
+    y2: "27",
+    stroke: "#F3E500"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "14.5",
+    y1: "30",
+    x2: "19.5",
+    y2: "30",
+    stroke: "#2E7D32",
+    opacity: ".7"
+  }))),
+  title: 'Confiança de fitment',
+  text: 'Compatibilidade verificada por veículo — sem ajustes improvisados ou soluções paliativas.'
+}, {
+  icon: PILLAR_ICON(/*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
+    d: "M12 5 h10 v5 a5 5 0 0 1 -10 0 Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M12 7 H8.5 a3 3 0 0 0 2.5 4.5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M22 7 h3.5 a3 3 0 0 1 -2.5 4.5"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "17",
+    y1: "15",
+    x2: "17",
+    y2: "21"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "12",
+    y1: "24",
+    x2: "22",
+    y2: "24"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "14.5",
+    y1: "28",
+    x2: "19.5",
+    y2: "28",
+    stroke: "#2E7D32"
+  }))),
+  title: 'Padrão de performance',
+  text: 'Cada linha segue critérios técnicos consistentes, do primeiro ao último lote produzido.'
+}, {
+  icon: PILLAR_ICON(/*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("circle", {
+    cx: "17",
+    cy: "17",
+    r: "10"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 9 L20.5 17 L17 25 L13.5 17 Z"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17",
+    cy: "17",
+    r: "1.4",
+    fill: "#F3E500",
+    stroke: "none"
+  }))),
+  title: 'Origem rastreável',
+  text: 'Procedência clara de cada fornecedor e lote, com documentação técnica disponível.'
+}];
+function Pillars() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "pillars scroll-block",
+    id: "diferenciais"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Por que Forschen"), /*#__PURE__*/React.createElement("h2", null, "Padrões que sustentam", /*#__PURE__*/React.createElement("br", null), "cada componente.")), /*#__PURE__*/React.createElement("div", {
+    className: "pillar-grid"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "0",
+    height: "0",
+    style: {
+      position: 'absolute'
+    },
+    "aria-hidden": "true",
+    focusable: "false"
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "pillarGrad",
+    x1: "0",
+    y1: "0",
+    x2: "1",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#F3E500"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#2E7D32"
+  })))), PILLARS.map((p, i) => /*#__PURE__*/React.createElement(Reveal, {
+    delay: i % 3 * 90,
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pillar"
+  }, p.icon, /*#__PURE__*/React.createElement("h3", null, p.title), /*#__PURE__*/React.createElement("p", null, p.text)))))));
+}
+const VALUES = [{
+  title: 'Qualidade',
+  text: 'Controle de qualidade em cada etapa da produção, com inspeções rigorosas, testes dimensionais e validações funcionais antes de cada peça chegar ao mercado.'
+}, {
+  title: 'Precisão',
+  text: 'Desenvolvimento com rigor técnico e tolerâncias rigorosas, garantindo desempenho consistente e compatibilidade verificada por veículo.'
+}, {
+  title: 'Confiabilidade',
+  text: 'Processos que seguem padrões internacionais de qualidade em unidades industriais especializadas, com origem rastreável em cada lote.'
+}];
+function Values() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "values scroll-block"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Compromisso"), /*#__PURE__*/React.createElement("h2", null, "Qualidade, precisão", /*#__PURE__*/React.createElement("br", null), "e confiabilidade."))), /*#__PURE__*/React.createElement("div", {
+    className: "wrap",
+    style: {
+      padding: 0,
+      maxWidth: 1360
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "values-inner"
+  }, VALUES.map((v, i) => /*#__PURE__*/React.createElement(Reveal, {
+    delay: i * 110,
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "value-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "value-num"
+  }, "0", i + 1), /*#__PURE__*/React.createElement("h3", null, v.title), /*#__PURE__*/React.createElement("p", null, v.text)))))));
+}
+const WARRANTY_TOPICS = [{
+  title: 'Política de garantia',
+  text: 'Termos gerais da garantia oferecida pela FORSCHEN para cada linha de produto.'
+}, {
+  title: 'Procedimentos',
+  text: 'Passo a passo para acionar a garantia junto ao ponto de venda ou distribuidor oficial.'
+}, {
+  title: 'Prazo',
+  text: 'Prazos de cobertura conforme o produto e a aplicação.'
+}, {
+  title: 'Suporte',
+  text: 'Canais de atendimento e suporte técnico para dúvidas e assistência.'
+}, {
+  title: 'Documentação necessária',
+  text: 'Documentos exigidos para validação do atendimento de garantia.'
+}];
+function Warranty() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "warranty scroll-block",
+    id: "garantia"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap warranty-grid"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Garantia"), /*#__PURE__*/React.createElement("h2", null, "Garantia que protege", /*#__PURE__*/React.createElement("br", null), "sua compra."), /*#__PURE__*/React.createElement("p", null, "Estamos preparando uma página exclusiva de garantia. Em breve você encontrará aqui todas as informações necessárias, organizadas nos tópicos abaixo."), /*#__PURE__*/React.createElement("span", {
+    className: "badge"
+  }, "Em breve")), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 120
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "warranty-list"
+  }, WARRANTY_TOPICS.map((t, i) => /*#__PURE__*/React.createElement("div", {
+    className: "w-topic",
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-num"
+  }, "0", i + 1), /*#__PURE__*/React.createElement("div", {
+    className: "w-body"
+  }, /*#__PURE__*/React.createElement("h3", null, t.title), /*#__PURE__*/React.createElement("p", null, t.text))))))));
+}
+function Distribution() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "distribution scroll-block",
+    id: "distribuicao"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Distribuição"), /*#__PURE__*/React.createElement("h2", null, "Onde encontrar", /*#__PURE__*/React.createElement("br", null), "os produtos FORSCHEN."), /*#__PURE__*/React.createElement("p", null, "A FORSCHEN conta com parceiros estratégicos em diversos mercados. No Brasil, a distribuição oficial é realizada pela Starke Parts, responsável pela comercialização, suporte comercial e atendimento da marca no território nacional, principalmente na região Sudeste.")), /*#__PURE__*/React.createElement("div", {
+    className: "dist-grid"
+  }, /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
+    className: "dist-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tag"
+  }, "Distribuidor Oficial"), /*#__PURE__*/React.createElement("div", {
+    className: "dist-logo"
+  }, "STARKE", /*#__PURE__*/React.createElement("span", null, "PARTS")), /*#__PURE__*/React.createElement("p", null, "Responsável pela comercialização, suporte comercial e atendimento da marca FORSCHEN no Brasil. Confiabilidade de uma distribuição oficial em todo o território nacional."), /*#__PURE__*/React.createElement("a", {
+    href: "#contato",
+    className: "btn-primary"
+  }, "Entrar em Contato →"))), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 120
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dist-card dark"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tag"
+  }, "Como Comprar"), /*#__PURE__*/React.createElement("ol", {
+    className: "buy-steps"
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "01"), " Identifique o componente necessário para o seu veículo."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "02"), " Consulte disponibilidade e condições com o distribuidor oficial."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "03"), " Receba a peça com garantia e origem rastreável.")), /*#__PURE__*/React.createElement("a", {
+    href: "#contato",
+    className: "btn-ghost"
+  }, "Falar com a Starke Parts"))))));
+}
+const FAQS = [{
+  q: 'Quem fabrica a FORSCHEN?',
+  a: 'Resposta em breve.'
+}, {
+  q: 'Onde comprar?',
+  a: 'Resposta em breve.'
+}, {
+  q: 'Como funciona a garantia?',
+  a: 'Resposta em breve.'
+}, {
+  q: 'A peça possui compatibilidade OEM?',
+  a: 'Resposta em breve.'
+}, {
+  q: 'Como identificar produtos originais?',
+  a: 'Resposta em breve.'
+}, {
+  q: 'Onde encontro o catálogo?',
+  a: 'Resposta em breve.'
+}];
+function Faq() {
+  const [open, setOpen] = useState(0);
+  return /*#__PURE__*/React.createElement("section", {
+    className: "faq scroll-block",
+    id: "faq"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "FAQ"), /*#__PURE__*/React.createElement("h2", null, "Perguntas frequentes."), /*#__PURE__*/React.createElement("p", null, "Reunimos as principais dúvidas sobre a marca, os produtos e a distribuição.")), /*#__PURE__*/React.createElement("div", {
+    className: "faq-list"
+  }, FAQS.map((it, i) => /*#__PURE__*/React.createElement(Reveal, {
+    delay: i % 3 * 70,
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "faq-item" + (open === i ? ' open' : '')
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "faq-q",
+    onClick: () => setOpen(open === i ? -1 : i),
+    "aria-expanded": open === i
+  }, /*#__PURE__*/React.createElement("span", null, it.q), /*#__PURE__*/React.createElement("span", {
+    className: "faq-toggle"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "faq-a"
+  }, /*#__PURE__*/React.createElement("p", null, it.a)))))), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 200
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "faq-note"
+  }, "Para mais dúvidas, entre em contato pelo formulário abaixo ou acompanhe a FORSCHEN no Instagram."))));
+}
+function Contact() {
+  const [sent, setSent] = useState(false);
+  const onSubmit = e => {
+    e.preventDefault();
+    const f = e.target;
+    const subject = encodeURIComponent('Contato via site — FORSCHEN');
+    const body = encodeURIComponent('Empresa: ' + (f.company.value || '-') + '\n' + 'E-mail: ' + (f.email.value || '-') + '\n' + 'Telefone: ' + (f.phone.value || '-') + '\n\n' + 'Mensagem:\n' + (f.message.value || ''));
+    const a = document.createElement('a');
+    a.href = 'mailto:?subject=' + subject + '&body=' + body;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setSent(true);
+  };
+  return /*#__PURE__*/React.createElement("section", {
+    className: "contact scroll-block",
+    id: "contato"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap contact-grid"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "eyebrow"
+  }, "Contato"), /*#__PURE__*/React.createElement("h2", null, "Fale com a", /*#__PURE__*/React.createElement("br", null), "FORSCHEN."), /*#__PURE__*/React.createElement("p", null, "Para mais dúvidas, entre em contato pelo formulário ao lado ou acompanhe nossas novidades no Instagram."), /*#__PURE__*/React.createElement("a", {
+    className: "contact-ig",
+    href: "https://www.instagram.com/forschenbrasil/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "20",
+    height: "20",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "2",
+    y: "2",
+    width: "20",
+    height: "20",
+    rx: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17.5",
+    cy: "6.5",
+    r: "1",
+    fill: "currentColor",
+    stroke: "none"
+  })), "@forschenbrasil")), /*#__PURE__*/React.createElement(Reveal, {
+    delay: 120
+  }, /*#__PURE__*/React.createElement("form", {
+    className: "contact-form",
+    onSubmit: onSubmit
+  }, /*#__PURE__*/React.createElement("label", null, /*#__PURE__*/React.createElement("span", null, "Empresa"), /*#__PURE__*/React.createElement("input", {
+    name: "company",
+    type: "text",
+    placeholder: "Sua empresa"
+  })), /*#__PURE__*/React.createElement("label", null, /*#__PURE__*/React.createElement("span", null, "E-mail"), /*#__PURE__*/React.createElement("input", {
+    name: "email",
+    type: "email",
+    required: true,
+    placeholder: "voce@empresa.com"
+  })), /*#__PURE__*/React.createElement("label", null, /*#__PURE__*/React.createElement("span", null, "Telefone"), /*#__PURE__*/React.createElement("input", {
+    name: "phone",
+    type: "tel",
+    placeholder: "(00) 00000-0000"
+  })), /*#__PURE__*/React.createElement("label", null, /*#__PURE__*/React.createElement("span", null, "Mensagem"), /*#__PURE__*/React.createElement("textarea", {
+    name: "message",
+    rows: "5",
+    required: true,
+    placeholder: "Como podemos ajudar?"
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    className: "btn-primary"
+  }, "Enviar Mensagem →"), sent && /*#__PURE__*/React.createElement("p", {
+    className: "form-note"
+  }, "Sua mensagem foi preparada. Envie pelo seu aplicativo de e-mail para concluirmos o contato.")))));
+}
+function Footer() {
+  return /*#__PURE__*/React.createElement("footer", {
+    className: "scroll-block"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "wrap footer-main"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "logo"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "logo-mark"
+  }), "FORSCHEN"), /*#__PURE__*/React.createElement("div", {
+    className: "footer-links"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#sobre"
+  }, "Sobre"), /*#__PURE__*/React.createElement("a", {
+    href: "#engenharia"
+  }, "Engenharia"), /*#__PURE__*/React.createElement("a", {
+    href: "#garantia"
+  }, "Garantia"), /*#__PURE__*/React.createElement("a", {
+    href: "#faq"
+  }, "FAQ"), /*#__PURE__*/React.createElement("a", {
+    href: "#contato"
+  }, "Contato")), /*#__PURE__*/React.createElement("div", {
+    className: "footer-social"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "https://www.instagram.com/forschenbrasil/",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    "aria-label": "Instagram"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "20",
+    height: "20",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "2",
+    y: "2",
+    width: "20",
+    height: "20",
+    rx: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "17.5",
+    cy: "6.5",
+    r: "1",
+    fill: "currentColor",
+    stroke: "none"
+  }))))), /*#__PURE__*/React.createElement("div", {
+    className: "wrap footer-note-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "footer-note"
+  }, "© 2026 FORSCHEN — PRECISION ENGINEERED COMPONENTS"), /*#__PURE__*/React.createElement("div", {
+    className: "footer-note"
+  }, "Distribuição oficial no Brasil: Starke Parts")));
+}
+function Particles() {
+  useEffect(() => {
+    const container = document.body;
+    const parts = [];
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 2.5 + 1;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top = Math.random() * 100 + 'vh';
+      p.style.opacity = Math.random() * 0.4 + 0.1;
+      container.appendChild(p);
+      parts.push(p);
+      anime({
+        targets: p,
+        translateY: [0, -(Math.random() * 120 + 60)],
+        translateX: [0, Math.random() * 60 - 30],
+        opacity: [p.style.opacity, 0],
+        duration: Math.random() * 6000 + 6000,
+        easing: 'linear',
+        loop: true,
+        delay: Math.random() * 4000
+      });
+    }
+    return () => parts.forEach(p => p.remove());
+  }, []);
+  return null;
+}
+function ProgressBar() {
+  const barRef = useRef(null);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrollY = window.__virtualScrollY ?? h.scrollTop;
+      const pct = scrollY / (h.scrollHeight - h.clientHeight) * 100;
+      if (barRef.current) barRef.current.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "progress-track"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "progress-bar",
+    ref: barRef
+  }));
+}
+function CustomCursor() {
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
+  const needleRef = useRef(null);
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const needle = needleRef.current;
+    if (!dot || !ring) return;
+    const dotS = dot.style;
+    const ringS = ring.style;
+    const needleS = needle ? needle.style : null;
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    let dx = mx,
+      dy = my;
+    let rx = mx,
+      ry = my;
+    let prevX = mx,
+      prevY = my;
+    let speed = 0;
+    let frameId;
+    let hovering = false;
+    const render = () => {
+      dx += (mx - dx) * 0.5;
+      dy += (my - dy) * 0.5;
+      rx += (mx - rx) * 0.45;
+      ry += (my - ry) * 0.45;
+      const sdx = mx - prevX,
+        sdy = my - prevY;
+      const s = Math.min(sdx * sdx + sdy * sdy, 6400);
+      speed += (s - speed) * 0.12;
+      prevX = mx;
+      prevY = my;
+      dotS.transform = `translate3d(${dx}px,${dy}px,0)`;
+      ringS.transform = `translate3d(${rx}px,${ry}px,0)`;
+      if (needleS) needleS.transform = `rotate(${-90 + speed / 6400 * 180}deg)`;
+      frameId = requestAnimationFrame(render);
+    };
+    const onMove = e => {
+      mx = e.clientX;
+      my = e.clientY;
+      document.documentElement.classList.add('has-custom-cursor');
+    };
+    const onOver = e => {
+      const h = !!e.target.closest('a,button');
+      if (h !== hovering) {
+        hovering = h;
+        document.documentElement.classList.toggle('cursor-hover', h);
+      }
+    };
+    window.addEventListener('pointermove', onMove, {
+      passive: true
+    });
+    window.addEventListener('pointerleave', () => document.documentElement.classList.remove('has-custom-cursor'));
+    window.addEventListener('pointerdown', () => document.documentElement.classList.add('cursor-active'), {
+      passive: true
+    });
+    window.addEventListener('pointerup', () => document.documentElement.classList.remove('cursor-active'), {
+      passive: true
+    });
+    document.addEventListener('mouseover', onOver, {
+      passive: true
+    });
+    frameId = requestAnimationFrame(render);
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "custom-cursor-layer",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cursor-dot-wrap",
+    ref: dotRef
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cursor-dot"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "cursor-ring-wrap",
+    ref: ringRef
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "cursor-tacho",
+    viewBox: "0 0 44 44"
+  }, /*#__PURE__*/React.createElement("circle", {
+    className: "tacho-ring",
+    cx: "22",
+    cy: "22",
+    r: "20"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tacho-glow",
+    cx: "22",
+    cy: "22",
+    r: "20"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "2",
+    y1: "22",
+    x2: "5",
+    y2: "22"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "7.5",
+    y1: "10",
+    x2: "10",
+    y2: "12"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "17",
+    y1: "3",
+    x2: "18",
+    y2: "6"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "22",
+    y1: "2",
+    x2: "22",
+    y2: "5"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "27",
+    y1: "3",
+    x2: "26",
+    y2: "6"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "36.5",
+    y1: "10",
+    x2: "34",
+    y2: "12"
+  }), /*#__PURE__*/React.createElement("line", {
+    className: "tacho-tick",
+    x1: "42",
+    y1: "22",
+    x2: "39",
+    y2: "22"
+  }), /*#__PURE__*/React.createElement("line", {
+    ref: needleRef,
+    className: "tacho-needle",
+    x1: "22",
+    y1: "22",
+    x2: "22",
+    y2: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "tacho-center",
+    cx: "22",
+    cy: "22",
+    r: "2.5"
+  }))));
+}
+function App() {
+  const [introDone, setIntroDone] = useState(false);
+  const [videoDone, setVideoDone] = useState(false);
+  useEffect(() => {
+    if (videoDone) {
+      anime.timeline({
+        easing: 'cubicBezier(.16,.8,.24,1)'
+      }).add({
+        targets: '#heroEyebrow',
+        opacity: [0, 1],
+        translateY: [16, 0],
+        duration: 700
+      }).add({
+        targets: '#heroTitle',
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 900
+      }, '-=500').add({
+        targets: '#heroSub',
+        opacity: [0, 1],
+        translateY: [16, 0],
+        duration: 700
+      }, '-=600').add({
+        targets: '#heroCtas',
+        opacity: [0, 1],
+        translateY: [16, 0],
+        duration: 700
+      }, '-=500').add({
+        targets: '#heroObj',
+        opacity: [0, 1],
+        translateX: [40, 0],
+        duration: 1100
+      }, '-=800').add({
+        targets: '#scrollCue',
+        opacity: [0, 1],
+        duration: 600
+      }, '-=300');
+    }
+  }, [videoDone]);
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll('section, footer')).filter(el => !el.classList.contains('hero'));
+    if (!sections.length) return;
+    sections.forEach(section => section.classList.add('scroll-block'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.dataset.entered) {
+          entry.target.dataset.entered = '1';
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: .18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+    sections.forEach(section => io.observe(section));
+    return () => io.disconnect();
+  }, []);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "letterbox top"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "letterbox bottom"
+  }), !introDone && !videoDone && /*#__PURE__*/React.createElement(TitleCard, {
+    onDone: () => setIntroDone(true)
+  }), introDone && !videoDone && /*#__PURE__*/React.createElement(IntroVideo, {
+    onDone: () => setVideoDone(true)
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "grain"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "vignette"
+  }), /*#__PURE__*/React.createElement(CustomCursor, null), /*#__PURE__*/React.createElement(ProgressBar, null), /*#__PURE__*/React.createElement(Particles, null), /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement("main", {
+    className: "page-flow"
+  }, /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(ProductStory, null), /*#__PURE__*/React.createElement(Pillars, null), /*#__PURE__*/React.createElement(Values, null), /*#__PURE__*/React.createElement(Warranty, null), /*#__PURE__*/React.createElement(Distribution, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Footer, null)));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+</script>
+</body>
+</html>
