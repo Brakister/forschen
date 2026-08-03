@@ -34,6 +34,20 @@ function RotatingWord({words, interval=2600}){
   const ref = useRef(null);
   useEffect(()=>{
     const t = setInterval(()=> setI(v => (v+1)%words.length), interval);
+    const el = ref.current;
+    if(el){
+      const probe = document.createElement('span');
+      probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:0;';
+      probe.style.font = getComputedStyle(el).font;
+      document.body.appendChild(probe);
+      let w = 0;
+      for(const word of words){
+        probe.textContent = word;
+        w = Math.max(w, probe.offsetWidth);
+      }
+      document.body.removeChild(probe);
+      el.style.minWidth = w + 'px';
+    }
     return ()=> clearInterval(t);
   },[words.length, interval]);
   useEffect(()=>{
@@ -141,7 +155,7 @@ function About(){
       <div className="wrap">
         <Reveal className="section-head">
           <div className="eyebrow">Sobre a Marca</div>
-          <h2>Desenvolvido para elevar o padrão do mercado de <RotatingWord words={["reposição automotiva.","alta performance.","máxima confiabilidade.","excelência técnica.","inovação contínua."]} /></h2>
+          <h2>Desenvolvido para elevar o padrão{'\u00A0'}do mercado de <RotatingWord words={["reposição automotiva.","alta performance.","máxima confiabilidade.","excelência técnica.","inovação contínua."]} /></h2>
         </Reveal>
         <div className="about-grid">
           <Reveal>
