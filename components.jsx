@@ -117,31 +117,6 @@ function Header(){
   );
 }
 
-function HeroObject(){
-  const objRef = useRef(null);
-
-  useEffect(()=>{
-    const onMove = (e)=>{
-      if(!window.matchMedia('(pointer: fine)').matches) return;
-      const x = (e.clientX / window.innerWidth - .5) * 18;
-      const y = (e.clientY / window.innerHeight - .5) * 14;
-      if(objRef.current){
-        objRef.current.style.transform = `translateY(-46%) translate(${x}px, ${y}px) rotate(${x*0.15}deg)`;
-      }
-    };
-    window.addEventListener('mousemove', onMove);
-    anime({targets:'.sweep', translateX:['0%','560%'], duration:3400, delay:2200, easing:'easeInOutSine', loop:true, direction:'alternate'});
-    return ()=> window.removeEventListener('mousemove', onMove);
-  },[]);
-
-  return (
-    <div className="hero-object" ref={objRef} id="heroObj">
-      <img src="bombafor.png" alt="Bomba FORSCHEN" className="hero-canvas hero-bomba"/>
-      <div className="sweep"></div>
-    </div>
-  );
-}
-
 function Hero(){
   return (
     <section className="hero">
@@ -155,7 +130,6 @@ function Hero(){
           <a href="#contato" className="btn-ghost">Solicitar Orçamento</a>
         </div>
       </div>
-      <HeroObject/>
       <div className="scroll-cue" id="scrollCue"><span>Role para explorar</span><span className="line"></span></div>
     </section>
   );
