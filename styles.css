@@ -207,6 +207,7 @@ section{position:relative;padding:160px 0;}
 .dist-card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--green-light);text-transform:uppercase;}
 .dist-logo{font-family:var(--display);font-weight:700;font-size:38px;letter-spacing:.02em;color:var(--white);line-height:1;}
 .dist-logo span{display:block;font-size:22px;color:var(--muted-2);letter-spacing:.42em;margin-top:8px;}
+.dist-logo-img{width:100%;max-width:260px;height:auto;display:block;}
 .dist-card p{font-size:15px;color:var(--muted);line-height:1.75;}
 .buy-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px;}
 .buy-steps li{display:flex;gap:16px;font-size:15px;color:var(--muted);line-height:1.6;}
