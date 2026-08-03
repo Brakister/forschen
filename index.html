@@ -19,6 +19,8 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&f[]=jetbrains-mono@400,500&display=swap">
 <link rel="stylesheet" href="styles.css">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -185,8 +187,10 @@ function Header() {
     className: scrolled ? 'scrolled' : ''
   }, /*#__PURE__*/React.createElement("div", {
     className: "logo"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "logo-mark"
+  }, /*#__PURE__*/React.createElement("img", {
+    className: "logo-mark",
+    src: "logo.png",
+    alt: "FORSCHEN"
   }), "FORSCHEN"), /*#__PURE__*/React.createElement("nav", {
     className: "links" + (open ? ' mobile-open' : ''),
     onClick: () => setOpen(false)
@@ -865,8 +869,10 @@ function Footer() {
     className: "wrap footer-main"
   }, /*#__PURE__*/React.createElement("div", {
     className: "logo"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "logo-mark"
+  }, /*#__PURE__*/React.createElement("img", {
+    className: "logo-mark",
+    src: "logo.png",
+    alt: "FORSCHEN"
   }), "FORSCHEN"), /*#__PURE__*/React.createElement("div", {
     className: "footer-links"
   }, /*#__PURE__*/React.createElement("a", {
