@@ -199,7 +199,8 @@ section{position:relative;padding:160px 0;}
 .badge{display:inline-flex;align-items:center;margin-top:26px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--yellow);border:1px solid rgba(243,229,0,.35);padding:8px 14px;border-radius:2px;background:rgba(243,229,0,.05);}
 .warranty-list{border-top:1px solid var(--hairline-strong);}
 .w-topic{display:flex;gap:24px;padding:26px 0;border-bottom:1px solid var(--hairline);}
-.w-num{font-family:var(--mono);font-size:12px;color:var(--green-light);letter-spacing:.08em;padding-top:4px;}
+.w-num{font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding-top:4px;background:linear-gradient(90deg,var(--green-light),var(--yellow),var(--green-light),var(--yellow),var(--green-light));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:num-shift 3.5s linear infinite;}
+@keyframes num-shift{0%{background-position:0 0}100%{background-position:300% 0}}
 .w-body h3{font-size:19px;color:var(--white);font-weight:500;}
 .w-body p{margin-top:8px;font-size:14.5px;color:var(--muted);line-height:1.7;max-width:52ch;}
 
