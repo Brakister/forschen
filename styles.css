@@ -215,8 +215,9 @@ section{position:relative;padding:160px 0;}
   animation:grad-shift 5s linear infinite;
 }
 @keyframes grad-shift{0%{background-position:0% 0}100%{background-position:200% 0}}
-.section-head h2 em.rotating-word,.hero h1 em.rotating-word{display:inline-block;animation:word-in .65s cubic-bezier(.16,.8,.24,1),grad-shift 5s linear infinite;}
-@keyframes word-in{from{opacity:0;transform:translateY(.4em);}to{opacity:1;transform:translateY(0);}}
+.section-head h2,.hero h1{perspective:900px;}
+.section-head h2 em.rotating-word,.hero h1 em.rotating-word{display:inline-block;transform-origin:50% 100%;animation:word-in .7s cubic-bezier(.16,.8,.24,1),grad-shift 5s linear infinite;}
+@keyframes word-in{from{opacity:0;transform:translateY(80%) rotateX(-85deg);}to{opacity:1;transform:translateY(0) rotateX(0);}}
 .footer-main .logo,.footer-links a,.footer-note{
   background:linear-gradient(135deg,var(--green-light),var(--yellow),var(--green-light),var(--yellow),var(--green-light));
   background-size:200% 200%;
