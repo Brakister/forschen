@@ -207,6 +207,19 @@ section{position:relative;padding:160px 0;}
 .w-topic{display:flex;gap:24px;padding:26px 0;border-bottom:1px solid var(--hairline);}
 .w-num{font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding-top:4px;background:linear-gradient(90deg,var(--green-light),var(--yellow),var(--green-light),var(--yellow),var(--green-light));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:num-shift 3.5s linear infinite;}
 @keyframes num-shift{0%{background-position:0 0}100%{background-position:300% 0}}
+.eyebrow,nav.links a,.hero h1 em,.section-head h2 em,.manifesto-lead .accent,.m-point .tag,.value-num,.about-card .tag,.dist-card .tag,.form-note{
+  background:linear-gradient(90deg,var(--green-light),var(--yellow),var(--green-light));
+  background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:grad-shift 5s linear infinite;
+}
+@keyframes grad-shift{0%{background-position:0% 0}100%{background-position:200% 0}}
+.footer-main .logo,.footer-links a,.footer-note{
+  background:linear-gradient(135deg,var(--green-light),var(--yellow),var(--green-light),var(--yellow),var(--green-light));
+  background-size:200% 200%;
+  animation:grad-shift 7s linear infinite;
+}
 .w-body h3{font-size:19px;color:var(--white);font-weight:500;}
 .w-body p{margin-top:8px;font-size:14.5px;color:var(--muted);line-height:1.7;max-width:52ch;}
 
