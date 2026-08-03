@@ -74,9 +74,7 @@ function IntroVideo({onDone}){
   },[]);
   return (
     <div className="intro-video">
-      <video autoPlay muted playsInline style={{width:'100%',height:'100%',objectFit:'cover'}}>
-        <source src="bombacinne.mp4" type="video/mp4"/>
-      </video>
+      <img src="bombafor.png" alt="Bomba FORSCHEN" className="intro-bomba"/>
     </div>
   );
 }
