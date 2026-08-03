@@ -254,8 +254,21 @@ function HeroObject() {
     if (!video || !canvas) return;
     var ctx = canvas.getContext('2d');
     var frameId;
+    var skip = 2;
+    var count = 0;
+    var lastT = -1;
     function process() {
       if (video.paused || video.ended || !video.videoWidth) return;
+      count++;
+      if (count % skip !== 0) {
+        frameId = requestAnimationFrame(process);
+        return;
+      }
+      if (video.currentTime === lastT) {
+        frameId = requestAnimationFrame(process);
+        return;
+      }
+      lastT = video.currentTime;
       var s = 0.35,
         w = Math.round(video.videoWidth * s),
         h = Math.round(video.videoHeight * s);
@@ -940,7 +953,7 @@ function Particles() {
   useEffect(() => {
     const container = document.body;
     const parts = [];
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 12; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       const size = Math.random() * 2.5 + 1;
