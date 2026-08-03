@@ -113,13 +113,13 @@ nav.links a{transition:color .25s;color:var(--green-light);} nav.links a:hover{c
 .btn-primary,.btn-ghost,.nav-cta,.about-card,.dist-card,.value-item{position:relative;}
 .btn-primary::before,.btn-ghost::before,.nav-cta::before,
 .about-card::before,.dist-card::before,.value-item::before{
-  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;z-index:0;
-  background:conic-gradient(from var(--a) at 50% 50%, transparent 0 45%, var(--green-light) 52%, var(--yellow) 62%, transparent 75%);
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;z-index:0;
+  background:conic-gradient(from var(--a) at 50% 50%, var(--green-light), var(--yellow) 30%, var(--green-deep) 55%, var(--yellow) 80%, var(--green-light));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   mask-composite:exclude;
-  animation:border-spin 4s linear infinite;
+  animation:border-spin 6s linear infinite;
 }
 
 .hero-object{position:absolute;right:2%;top:50%;width:min(42vw,560px);z-index:1;opacity:0;
