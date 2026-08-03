@@ -45,35 +45,6 @@
     el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
   });
 })();
-(function(){
-  if(typeof CSS !== 'undefined' && typeof CSS.registerProperty === 'function') return;
-  function attempt(){
-    var els = document.querySelectorAll('.btn-primary,.btn-ghost,.nav-cta,.about-card,.dist-card,.value-item');
-    if(!els.length) return false;
-    var list = Array.prototype.slice.call(els);
-    var start = performance.now();
-    (function tick(now){
-      var deg = ((now - start) / 4000 * 360) % 360;
-      for(var i = 0; i < list.length; i++){
-        list[i].style.setProperty('--a', deg + 'deg');
-      }
-      requestAnimationFrame(tick);
-    })(start);
-    return true;
-  }
-  function boot(){
-    if(attempt()) return;
-    var tries = 0;
-    var iv = setInterval(function(){
-      if(attempt() || ++tries > 50) clearInterval(iv);
-    }, 100);
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
-})();
 </script>
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
