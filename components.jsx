@@ -31,11 +31,20 @@ function Reveal({children, delay=0, style, className=''}){
 
 function RotatingWord({words, interval=2600}){
   const [i, setI] = useState(0);
+  const ref = useRef(null);
   useEffect(()=>{
     const t = setInterval(()=> setI(v => (v+1)%words.length), interval);
     return ()=> clearInterval(t);
-  }, [words.length, interval]);
-  return <em key={i} className="rotating-word">{words[i]}</em>;
+  },[words.length, interval]);
+  useEffect(()=>{
+    const el = ref.current;
+    if(!el) return;
+    el.animate([
+      {opacity:0, transform:'perspective(600px) translateY(60%) rotateX(-95deg)'},
+      {opacity:1, transform:'perspective(600px) translateY(0) rotateX(0deg)'}
+    ], {duration:800, easing:'cubic-bezier(.2,.7,.2,1)', fill:'backwards'});
+  },[i]);
+  return <em ref={ref} className="rotating-word">{words[i]}</em>;
 }
 
 function TitleCard({onDone}){
