@@ -179,8 +179,21 @@ section{position:relative;padding:160px 0;}
 .pillar svg{margin-bottom:6px;}
 
 .values{background:var(--black);}
-.values-inner{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hairline-strong);border-bottom:1px solid var(--hairline-strong);}
-.value-item{padding:64px 40px;border-right:1px solid var(--hairline);}
+.values-inner{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--hairline);
+  border:1px solid var(--hairline);
+  border-radius:18px;
+  overflow:hidden;
+}
+.value-item{
+  padding:64px 40px;
+  border-right:none;
+  background:var(--black);
+  overflow:hidden;
+}
 .value-item:last-child{border-right:none;}
 .value-num{font-family:var(--mono);font-size:12px;color:var(--green-light);letter-spacing:.12em;}
 .value-item h3{font-size:26px;color:var(--white);margin-top:18px;font-weight:500;}
@@ -311,7 +324,7 @@ footer{padding:64px 0 32px;border-top:1px solid var(--hairline);}
   .manifesto-grid{grid-template-columns:1fr;gap:48px;}
   .pillar-grid{grid-template-columns:1fr;gap:40px;}
   .values-inner{grid-template-columns:1fr;}
-  .value-item{border-right:none;border-bottom:1px solid var(--hairline);}
+  .value-item{border-right:none;border-bottom:none;}
   .value-item:last-child{border-bottom:none;}
   .about-grid,.dist-grid{grid-template-columns:1fr;}
   .warranty-grid,.contact-grid{grid-template-columns:1fr;gap:48px;}
