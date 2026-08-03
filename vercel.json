@@ -1,12 +1,7 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "headers": [
-    {
-      "source": "/.*\\.(mp4|webm|mov)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
     {
       "source": "/(.*)",
       "headers": [
@@ -14,6 +9,15 @@
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)\\.(mp4|webm|mov)$",
+      "dest": "/$1.$2",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     }
   ]
 }
