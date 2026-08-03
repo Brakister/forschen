@@ -29,6 +29,15 @@ function Reveal({children, delay=0, style, className=''}){
   return <div ref={ref} className={"reveal "+className} style={style}>{children}</div>;
 }
 
+function RotatingWord({words, interval=2600}){
+  const [i, setI] = useState(0);
+  useEffect(()=>{
+    const t = setInterval(()=> setI(v => (v+1)%words.length), interval);
+    return ()=> clearInterval(t);
+  }, [words.length, interval]);
+  return <em key={i} className="rotating-word">{words[i]}</em>;
+}
+
 function TitleCard({onDone}){
   useEffect(()=>{
     const tl = anime.timeline({easing:'cubicBezier(.16,.8,.24,1)'});
@@ -169,7 +178,7 @@ function Hero(){
       <div className="hero-grid-lines"></div>
       <div className="hero-inner">
         <div className="eyebrow" id="heroEyebrow">Aftermarket · Componentes de Performance</div>
-        <h1 id="heroTitle">Precisão que se sente<br/>ao <em>girar a chave.</em></h1>
+          <h1 id="heroTitle">Precisão que se sente<br/>ao <RotatingWord words={["girar a chave.","dar a partida.","ligar o motor.","assumir o volante."]} /></h1>
         <p className="hero-sub" id="heroSub">A FORSCHEN é uma marca internacional especializada no desenvolvimento e fornecimento de componentes automotivos para o mercado de reposição (Aftermarket) — focada em qualidade, precisão e confiabilidade.</p>
         <div className="hero-ctas" id="heroCtas">
           <a href="#engenharia" className="btn-primary">Explorar Componentes →</a>
@@ -188,7 +197,7 @@ function About(){
       <div className="wrap">
         <Reveal className="section-head">
           <div className="eyebrow">Sobre a Marca</div>
-          <h2>Nascemos para elevar o padrão<br/>do mercado de reposição automotiva.</h2>
+          <h2>Desenvolvido para elevar o padrão do mercado de <RotatingWord words={["reposição automotiva.","alta performance.","máxima confiabilidade.","excelência técnica.","inovação contínua."]} /></h2>
         </Reveal>
         <div className="about-grid">
           <Reveal>
