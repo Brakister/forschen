@@ -119,46 +119,6 @@ function Header(){
 
 function HeroObject(){
   const objRef = useRef(null);
-  const canvasRef = useRef(null);
-
-  useEffect(()=>{
-    const canvas = canvasRef.current;
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.onload = ()=>{
-      const w = img.width, h = img.height;
-      canvas.width = w; canvas.height = h;
-      ctx.drawImage(img, 0, 0, w, h);
-      try {
-        const data = ctx.getImageData(0, 0, w, h), d = data.data;
-        const N = w * h, bg = new Uint8Array(N), stack = new Int32Array(N);
-        let sp = 0;
-        const white = i => d[i*4] > 240 && d[i*4+1] > 240 && d[i*4+2] > 240;
-        const seed = i => { if(!bg[i] && white(i)){ bg[i]=1; stack[sp++]=i; } };
-        for(let y=0;y<h;y++){ seed(y*w); seed(y*w+w-1); }
-        for(let x=0;x<w;x++){ seed(x); seed((h-1)*w+x); }
-        while(sp>0){
-          const i = stack[--sp], x = i%w, y = (i/w)|0;
-          if(x>0) seed(i-1);
-          if(x<w-1) seed(i+1);
-          if(y>0) seed(i-w);
-          if(y<h-1) seed(i+w);
-        }
-        for(let i=0;i<N;i++){
-          if(bg[i]){ d[i*4+3]=0; continue; }
-          const x=i%w, y=(i/w)|0;
-          if((x>0&&bg[i-1])||(x<w-1&&bg[i+1])||(y>0&&bg[i-w])||(y<h-1&&bg[i+w])){
-            const m = Math.max(d[i*4], d[i*4+1], d[i*4+2]);
-            d[i*4+3] = Math.max(0, Math.min(255, (255-m)*5));
-          }
-        }
-        ctx.putImageData(data, 0, 0);
-      } catch(err){}
-    };
-    img.src = 'bombafor.png';
-    return ()=>{ img.onload = null; };
-  },[]);
 
   useEffect(()=>{
     const onMove = (e)=>{
@@ -176,7 +136,7 @@ function HeroObject(){
 
   return (
     <div className="hero-object" ref={objRef} id="heroObj">
-      <canvas ref={canvasRef} className="hero-canvas hero-bomba"></canvas>
+      <img src="bombafor.png" alt="Bomba FORSCHEN" className="hero-canvas hero-bomba"/>
       <div className="sweep"></div>
     </div>
   );
