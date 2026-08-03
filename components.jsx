@@ -74,7 +74,9 @@ function IntroVideo({onDone}){
   },[]);
   return (
     <div className="intro-video">
-      <img src="bombafor.png" alt="Bomba FORSCHEN" className="intro-bomba"/>
+      <video autoPlay muted playsInline style={{width:'100%',height:'100%',objectFit:'cover'}}>
+        <source src="bombacinne.mp4" type="video/mp4"/>
+      </video>
     </div>
   );
 }
@@ -117,40 +119,27 @@ function Header(){
 
 function HeroObject(){
   const objRef = useRef(null);
-  const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(()=>{
-    const video = videoRef.current;
     const canvas = canvasRef.current;
-    if(!video || !canvas) return;
-    var ctx = canvas.getContext('2d');
-    var frameId;
-
-    function process(){
-      if(video.paused || video.ended || !video.videoWidth) return;
-      var s = 0.35, w = Math.round(video.videoWidth*s), h = Math.round(video.videoHeight*s);
-      if(canvas.width!==w) canvas.width = w;
-      if(canvas.height!==h) canvas.height = h;
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = ()=>{
+      const w = img.width, h = img.height;
+      canvas.width = w; canvas.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
       try {
-        ctx.drawImage(video, 0, 0, w, h);
-        var img = ctx.getImageData(0, 0, w, h), d = img.data;
-        for(var i=0;i<d.length;i+=4){
-          if(d[i+1]>d[i]*1.3 && d[i+1]>d[i+2]*1.3 && d[i+1]>50) d[i+3]=0;
+        const data = ctx.getImageData(0, 0, w, h), d = data.data;
+        for(let i=0;i<d.length;i+=4){
+          if(d[i]>230 && d[i+1]>230 && d[i+2]>230) d[i+3]=0;
         }
-        ctx.putImageData(img, 0, 0);
-      } catch(err) {
-        canvas.style.display = 'none';
-        video.style.opacity = 1;
-        return;
-      }
-      frameId = requestAnimationFrame(process);
-    }
-
-    function start(){ process(); }
-    video.addEventListener('play', start);
-    if(video.readyState > 1 && !video.paused) process();
-    return function(){ cancelAnimationFrame(frameId); video.removeEventListener('play', start); };
+        ctx.putImageData(data, 0, 0);
+      } catch(err){}
+    };
+    img.src = 'bombafor.png';
+    return ()=>{ img.onload = null; };
   },[]);
 
   useEffect(()=>{
@@ -169,11 +158,7 @@ function HeroObject(){
 
   return (
     <div className="hero-object" ref={objRef} id="heroObj">
-      <video ref={videoRef} autoPlay loop muted playsInline
-        style={{position:'absolute',width:'100%',height:'100%',opacity:0,pointerEvents:'none'}}>
-        <source src="pump.mp4" type="video/mp4"/>
-      </video>
-      <canvas ref={canvasRef} className="hero-canvas"></canvas>
+      <canvas ref={canvasRef} className="hero-canvas hero-bomba"></canvas>
       <div className="sweep"></div>
     </div>
   );
