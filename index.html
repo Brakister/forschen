@@ -52,13 +52,7 @@
     }
     return true;
   }
-  document.addEventListener('click', function(e){
-    var a = e.target.closest('a[href^="#"]');
-    if(!a) return;
-    e.preventDefault();
-    var id = a.getAttribute('href').slice(1);
-    scrollToId(id);
-  }, true);
+  window.__forschenScrollTo = scrollToId;
 })();
 </script>
 <script src="vendor/react.production.min.js"></script>
@@ -208,15 +202,40 @@ function Header() {
     className: "links" + (open ? ' mobile-open' : ''),
     onClick: () => setOpen(false)
   }, /*#__PURE__*/React.createElement("a", {
-    href: "#sobre"
+    href: "#sobre",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('sobre');
+      setOpen(false);
+    }
   }, "Sobre"), /*#__PURE__*/React.createElement("a", {
-    href: "#engenharia"
+    href: "#engenharia",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('engenharia');
+      setOpen(false);
+    }
   }, "Engenharia"), /*#__PURE__*/React.createElement("a", {
-    href: "#garantia"
+    href: "#garantia",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('garantia');
+      setOpen(false);
+    }
   }, "Garantia"), /*#__PURE__*/React.createElement("a", {
-    href: "#faq"
+    href: "#faq",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('faq');
+      setOpen(false);
+    }
   }, "FAQ"), /*#__PURE__*/React.createElement("a", {
-    href: "#contato"
+    href: "#contato",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('contato');
+      setOpen(false);
+    }
   }, "Contato")), /*#__PURE__*/React.createElement("div", {
     className: "header-right"
   }, /*#__PURE__*/React.createElement("a", {
@@ -253,7 +272,11 @@ function Header() {
   }))), /*#__PURE__*/React.createElement("a", {
     href: "#contato",
     className: "nav-cta",
-    onClick: () => setOpen(false)
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('contato');
+      setOpen(false);
+    }
   }, "Solicitar Orçamento"), /*#__PURE__*/React.createElement("button", {
     className: "nav-burger",
     "aria-label": "Menu",
@@ -284,9 +307,17 @@ function Hero() {
   }, /*#__PURE__*/React.createElement("a", {
     href: "#engenharia",
     className: "btn-primary"
+    , onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('engenharia');
+    }
   }, "Explorar Componentes →"), /*#__PURE__*/React.createElement("a", {
     href: "#contato",
     className: "btn-ghost"
+    , onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('contato');
+    }
   }, "Solicitar Orçamento"))), /*#__PURE__*/React.createElement("div", {
     className: "scroll-cue",
     id: "scrollCue"
@@ -807,19 +838,38 @@ function Footer() {
     src: "logo.png",
     alt: "FORSCHEN"
   }), "FORSCHEN"), /*#__PURE__*/React.createElement("div", {
-    className: "footer-links"
+        className: "footer-links"
   }, /*#__PURE__*/React.createElement("a", {
-    href: "#sobre"
+    href: "#sobre",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('sobre');
+    }
   }, "Sobre"), /*#__PURE__*/React.createElement("a", {
-    href: "#engenharia"
+    href: "#engenharia",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('engenharia');
+    }
   }, "Engenharia"), /*#__PURE__*/React.createElement("a", {
-    href: "#garantia"
+    href: "#garantia",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('garantia');
+    }
   }, "Garantia"), /*#__PURE__*/React.createElement("a", {
-    href: "#faq"
+    href: "#faq",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('faq');
+    }
   }, "FAQ"), /*#__PURE__*/React.createElement("a", {
-    href: "#contato"
-  }, "Contato")), /*#__PURE__*/React.createElement("div", {
-    className: "footer-social"
+    href: "#contato",
+    onClick: e => {
+      e.preventDefault();
+      window.__forschenScrollTo && window.__forschenScrollTo('contato');
+    }
+  }, "Contato")), /*#__PURE__*/React.createElement("div", {className: "footer-social"
   }, /*#__PURE__*/React.createElement("a", {
     href: "https://www.instagram.com/forschenbrasil/",
     target: "_blank",
@@ -1022,7 +1072,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.c
   layer.className = 'custom-cursor-layer cursor-live-layer';
   layer.style.display = 'block';
   layer.style.opacity = '1';
-  layer.innerHTML = '<div class="cursor-burst"></div><div class="cursor-keychain-wrap"><img class="cursor-keychain" src="forschen-disc-cursor.svg" alt=""></div>';
+  layer.innerHTML = '<div class="cursor-burst"></div><div class="cursor-keychain-wrap"><img class="cursor-keychain" src="forschen-cursor.svg" alt=""></div>';
   document.body.appendChild(layer);
 
   const cursor = layer.querySelector('.cursor-keychain-wrap');
