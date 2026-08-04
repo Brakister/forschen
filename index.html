@@ -37,16 +37,28 @@
 <script>
 (function(){
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function scrollToId(id){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var top = el.getBoundingClientRect().top + (window.__virtualScrollY ?? window.scrollY ?? 0) - 90;
+    top = Math.max(top, 0);
+    try{
+      window.scrollTo({top: top, behavior: reduceMotion ? 'auto' : 'smooth'});
+    }catch(err){
+      window.scrollTo(0, top);
+    }
+    if(history && history.replaceState){
+      history.replaceState(null, '', '#'+id);
+    }
+    return true;
+  }
   document.addEventListener('click', function(e){
     var a = e.target.closest('a[href^="#"]');
     if(!a) return;
     e.preventDefault();
     var id = a.getAttribute('href').slice(1);
-    var el = document.getElementById(id);
-    if(!el) return;
-    var top = el.getBoundingClientRect().top + (window.__virtualScrollY ?? window.scrollY ?? 0) - 90;
-    window.scrollTo({top: Math.max(top, 0), behavior: reduceMotion ? 'auto' : 'smooth'});
-  });
+    scrollToId(id);
+  }, true);
 })();
 </script>
 <script src="vendor/react.production.min.js"></script>
