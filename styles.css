@@ -38,15 +38,15 @@ h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-0.02em;line-
 .custom-cursor-layer{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s ease;}
 html.has-custom-cursor .custom-cursor-layer{opacity:1;}
 .cursor-dot-wrap,.cursor-dot,.cursor-ring-wrap,.cursor-tacho{display:none !important;}
-.cursor-keychain-wrap,.cursor-burst{position:absolute;top:0;left:0;will-change:transform,opacity;transform:translate3d(-999px,-999px,0);}
+.cursor-keychain-wrap,.cursor-burst{position:absolute;top:0;left:0;will-change:transform,opacity;transform:translate3d(-999px,-999px,0);pointer-events:none;}
 .cursor-keychain-wrap{
   perspective:800px;
   filter:drop-shadow(0 10px 18px rgba(0,0,0,.48)) drop-shadow(0 0 18px rgba(243,229,0,.18));
   transition:filter .2s ease,opacity .2s ease;
 }
 .cursor-keychain{
-  width:54px;
-  height:54px;
+  width:32px;
+  height:32px;
   display:block;
   object-fit:contain;
   transform:translate(-50%,-50%) translateY(var(--cursor-lift, 0px)) rotateX(var(--cursor-depth, 0deg)) rotate(var(--cursor-tilt, 0deg)) scale(var(--cursor-scale, 1));

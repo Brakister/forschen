@@ -1065,8 +1065,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.c
   const onDown = e => {
     document.documentElement.classList.add('cursor-active');
     document.documentElement.classList.add('cursor-drilling');
-    burstStyle.left = `${e.clientX}px`;
-    burstStyle.top = `${e.clientY}px`;
+    burstStyle.setProperty('--burst-x', `${e.clientX}px`);
+    burstStyle.setProperty('--burst-y', `${e.clientY}px`);
     burst.classList.remove('is-active');
     burst.getBoundingClientRect();
     burst.classList.add('is-active');
