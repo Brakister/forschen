@@ -44,7 +44,8 @@
     var id = a.getAttribute('href').slice(1);
     var el = document.getElementById(id);
     if(!el) return;
-    el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
+    var top = el.getBoundingClientRect().top + (window.__virtualScrollY ?? window.scrollY ?? 0) - 90;
+    window.scrollTo({top: Math.max(top, 0), behavior: reduceMotion ? 'auto' : 'smooth'});
   });
 })();
 </script>
