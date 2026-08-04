@@ -1,0 +1,66 @@
+<svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="rotorFace" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#4a4d52"/>
+      <stop offset="55%" stop-color="#232529"/>
+      <stop offset="100%" stop-color="#0a0a0b"/>
+    </radialGradient>
+    <linearGradient id="rimEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9aa0a8"/>
+      <stop offset="100%" stop-color="#2c2e32"/>
+    </linearGradient>
+    <radialGradient id="hub" cx="40%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#5a5d63"/>
+      <stop offset="100%" stop-color="#111214"/>
+    </radialGradient>
+    <filter id="ds" x="-40%" y="-40%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="1" stdDeviation="0.9" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#ds)">
+    <!-- outer rotor ring -->
+    <circle cx="17" cy="17" r="15.4" fill="url(#rotorFace)" stroke="url(#rimEdge)" stroke-width="1"/>
+
+    <!-- cross-drilled holes, ring 1 -->
+    <g fill="#050506">
+      <circle cx="17" cy="4.6" r="1"/>
+      <circle cx="27.1" cy="9.9" r="1"/>
+      <circle cx="29.4" cy="21.4" r="1"/>
+      <circle cx="21.9" cy="29.2" r="1"/>
+      <circle cx="10.1" cy="29" r="1"/>
+      <circle cx="4.7" cy="20.9" r="1"/>
+      <circle cx="6.7" cy="10.1" r="1"/>
+      <circle cx="12.1" cy="4.4" r="1"/>
+    </g>
+
+    <!-- slotted vane lines suggesting ventilation -->
+    <g stroke="#050506" stroke-width="1.1" stroke-linecap="round" opacity="0.8">
+      <line x1="17" y1="7.6" x2="17" y2="11.6"/>
+      <line x1="24.9" y1="12.4" x2="21.5" y2="14.5"/>
+      <line x1="26.3" y1="21.6" x2="22.2" y2="20.1"/>
+      <line x1="20.2" y1="27.3" x2="18.6" y2="23.6"/>
+      <line x1="12.8" y1="27" x2="14.7" y2="23.4"/>
+      <line x1="7.3" y1="21.1" x2="11.4" y2="19.9"/>
+      <line x1="8.4" y1="12" x2="12.1" y2="14"/>
+    </g>
+
+    <!-- worn edge accent -->
+    <circle cx="17" cy="17" r="15.4" fill="none" stroke="#c9a04a" stroke-width="0.6" opacity="0.5"/>
+
+    <!-- hub / center cap -->
+    <circle cx="17" cy="17" r="6.6" fill="url(#hub)" stroke="#6a6d73" stroke-width="0.6"/>
+
+    <!-- lug bolts -->
+    <g fill="#0a0a0b" stroke="#8a8f97" stroke-width="0.4">
+      <circle cx="17" cy="12.6" r="1"/>
+      <circle cx="20.8" cy="15.1" r="1"/>
+      <circle cx="19.4" cy="19.6" r="1"/>
+      <circle cx="14.6" cy="19.6" r="1"/>
+      <circle cx="13.2" cy="15.1" r="1"/>
+    </g>
+
+    <!-- precision hotspot mark, center -->
+    <circle cx="17" cy="17" r="1.3" fill="#c9a04a"/>
+  </g>
+</svg>
