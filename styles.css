@@ -30,51 +30,11 @@ body{
 body.has-virtual-scroll{
   overflow:hidden;
 }
-html.has-custom-cursor, html.has-custom-cursor *{cursor:none;}
 ::selection{background:var(--green);color:var(--white);}
 a{color:inherit;text-decoration:none;} button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
 img,canvas,video{max-width:100%;}
 :focus-visible{outline:2px solid var(--green-light);outline-offset:4px;}
 h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-0.02em;line-height:1.02;}
-
-.custom-cursor-layer{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;transition:opacity .18s ease;}
-html.has-custom-cursor .custom-cursor-layer{opacity:1;}
-.custom-cursor{
-  position:absolute;
-  top:0;
-  left:0;
-  width:24px;
-  height:32px;
-  background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M4 2L4 29L10 23L14 31L17 30L13 21L21 21L4 2Z' fill='%23ffffff' stroke='%23d9d9d9' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.12),
-    0 0 14px rgba(46,125,50,.14),
-    0 0 22px rgba(243,229,0,.09);
-  transform:translate3d(-999px,-999px,0) translate(-50%,-50%);
-  will-change:transform,opacity,box-shadow;
-  pointer-events:none;
-}
-.cursor-burst,
-.cursor-keychain-wrap,
-.cursor-keychain{display:none !important;}
-html.cursor-hover .custom-cursor{
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.18),
-    0 0 16px rgba(46,125,50,.18),
-    0 0 26px rgba(243,229,0,.12);
-}
-html.cursor-active .custom-cursor{
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.22),
-    0 0 18px rgba(46,125,50,.2),
-    0 0 30px rgba(243,229,0,.14);
-}
-html.page-scrolling .custom-cursor{
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.14),
-    0 0 18px rgba(46,125,50,.16),
-    0 0 30px rgba(243,229,0,.1);
-}
 
 .letterbox{position:fixed;left:0;right:0;height:14vh;background:#000;z-index:998;pointer-events:none;}
 .letterbox.top{top:0;} .letterbox.bottom{bottom:0;}
@@ -439,11 +399,9 @@ footer{padding:64px 0 32px;border-top:1px solid var(--hairline);}
   .footer-main,.footer-note-row{width:100%;}
   .footer-note{max-width:100%;}
   .contact-wa{padding:28px 24px;}
-}
-@media (hover:none), (pointer:coarse){
-  html.has-custom-cursor, html.has-custom-cursor *{cursor:auto;}
-  .custom-cursor-layer{display:none;}
-}
+  }
+  @media (hover:none), (pointer:coarse){
+  }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important;transition:none !important;} }
 
 ::-webkit-scrollbar{width:10px;}

@@ -969,9 +969,6 @@ function ProgressBar() {
     ref: barRef
   }));
 }
-function CustomCursor() {
-  return null;
-}
 function WhatsAppFloat() {
   const url = 'https://wa.me/5511952063102?text=' + encodeURIComponent('Olá! Gostaria de mais informações sobre os produtos FORSCHEN.');
   return /*#__PURE__*/React.createElement("a", {
@@ -1060,78 +1057,11 @@ function App() {
     className: "grain"
   }), /*#__PURE__*/React.createElement("div", {
     className: "vignette"
-  }), /*#__PURE__*/React.createElement(CustomCursor, null), /*#__PURE__*/React.createElement(ProgressBar, null), /*#__PURE__*/React.createElement(WhatsAppFloat, null), /*#__PURE__*/React.createElement(Particles, null), /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement("main", {
+  }), /*#__PURE__*/React.createElement(ProgressBar, null), /*#__PURE__*/React.createElement(WhatsAppFloat, null), /*#__PURE__*/React.createElement(Particles, null), /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement("main", {
     className: "page-flow"
   }, /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(ProductStory, null), /*#__PURE__*/React.createElement(Pillars, null), /*#__PURE__*/React.createElement(Values, null), /*#__PURE__*/React.createElement(Warranty, null), /*#__PURE__*/React.createElement(Distribution, null), /*#__PURE__*/React.createElement(Faq, null), /*#__PURE__*/React.createElement(Contact, null), /*#__PURE__*/React.createElement(Footer, null)));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
-(() => {
-  if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
-  if (document.querySelector('.cursor-live-layer') || document.querySelector('.custom-cursor-layer .cursor-keychain-wrap')) return;
-  const layer = document.createElement('div');
-  layer.className = 'custom-cursor-layer cursor-live-layer';
-  layer.style.display = 'block';
-  layer.style.opacity = '1';
-  layer.innerHTML = '<div class="custom-cursor" aria-hidden="true"></div>';
-  document.body.appendChild(layer);
-
-  const cursor = layer.querySelector('.custom-cursor');
-  const cursorStyle = cursor.style;
-  let raf = 0;
-  let mx = window.innerWidth / 2;
-  let my = window.innerHeight / 2;
-  let x = mx;
-  let y = my;
-  let isDown = false;
-  let isVisible = false;
-  let scrollTimer = 0;
-
-  const render = () => {
-    x += (mx - x) * 0.28;
-    y += (my - y) * 0.28;
-    cursorStyle.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${isDown ? 0.92 : 1})`;
-    raf = requestAnimationFrame(render);
-  };
-
-  const onMove = e => {
-    mx = e.clientX;
-    my = e.clientY;
-    cursorStyle.setProperty('--cursor-x', `${mx}px`);
-    cursorStyle.setProperty('--cursor-y', `${my}px`);
-    if (!isVisible) {
-      document.documentElement.classList.add('has-custom-cursor');
-      isVisible = true;
-    }
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => document.documentElement.classList.remove('page-scrolling'), 120);
-  };
-  const onHover = e => {
-    document.documentElement.classList.toggle('cursor-hover', !!e.target.closest('a,button'));
-  };
-  const onDown = e => {
-    isDown = true;
-    document.documentElement.classList.add('cursor-active');
-  };
-  const onScroll = () => {
-    const y = window.__virtualScrollY ?? window.scrollY ?? 0;
-    document.documentElement.classList.add('page-scrolling');
-    document.documentElement.style.setProperty('--scroll-y', `${y}px`);
-    document.documentElement.style.setProperty('--scroll-progress', String(y / Math.max(document.documentElement.scrollHeight - document.documentElement.clientHeight, 1)));
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => document.documentElement.classList.remove('page-scrolling'), 120);
-  };
-
-  window.addEventListener('pointermove', onMove, {passive:true});
-  window.addEventListener('pointerdown', onDown, {passive:true});
-  window.addEventListener('pointerup', () => {
-    isDown = false;
-    document.documentElement.classList.remove('cursor-active');
-  }, {passive:true});
-  window.addEventListener('scroll', onScroll, {passive:true});
-  document.addEventListener('mouseover', onHover, {passive:true});
-  onScroll();
-  raf = requestAnimationFrame(render);
-})();
 </script>
 </body>
 </html>
