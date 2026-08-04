@@ -514,45 +514,48 @@ function ProgressBar(){
 }
 
 function CustomCursor(){
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const needleRef = useRef(null);
+  const cursorRef = useRef(null);
+  const burstRef = useRef(null);
 
   useEffect(()=>{
     if(!window.matchMedia('(pointer: fine)').matches) return;
 
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    const needle = needleRef.current;
-    if(!dot || !ring) return;
+    const cursor = cursorRef.current;
+    const burst = burstRef.current;
+    if(!cursor) return;
 
-    const dotS = dot.style;
-    const ringS = ring.style;
-    const needleS = needle ? needle.style : null;
+    const cursorS = cursor.style;
+    const burstS = burst ? burst.style : null;
 
     let mx = window.innerWidth / 2;
     let my = window.innerHeight / 2;
-    let dx = mx, dy = my;
-    let rx = mx, ry = my;
     let prevX = mx, prevY = my;
-    let speed = 0;
+    let dx = mx;
+    let dy = my;
+    let vx = 0;
+    let vy = 0;
+    let scrollKick = 0;
     let frameId;
     let hovering = false;
+    let activeTimer;
+    let scrollTimer;
 
     const render = ()=>{
-      dx += (mx - dx) * 0.5;
-      dy += (my - dy) * 0.5;
-      rx += (mx - rx) * 0.45;
-      ry += (my - ry) * 0.45;
+      dx += (mx - dx) * 0.34;
+      dy += (my - dy) * 0.34;
 
       const sdx = mx - prevX, sdy = my - prevY;
-      const s = Math.min(sdx * sdx + sdy * sdy, 6400);
-      speed += (s - speed) * 0.12;
+      vx += (sdx - vx) * 0.22;
+      vy += (sdy - vy) * 0.22;
       prevX = mx; prevY = my;
 
-      dotS.transform = `translate3d(${dx}px,${dy}px,0)`;
-      ringS.transform = `translate3d(${rx}px,${ry}px,0)`;
-      if(needleS) needleS.transform = `rotate(${-90 + (speed / 6400) * 180}deg)`;
+      scrollKick *= 0.88;
+      const tilt = Math.max(-18, Math.min(18, vx * 0.32));
+      const lift = Math.min(18, Math.max(0, scrollKick * 0.12));
+      const scale = 1 + Math.min(0.1, Math.max(0, scrollKick * 0.0012));
+
+      cursorS.transform = `translate3d(${dx}px,${dy}px,0) translate(-50%,-50%) rotate(${tilt}deg) scale(${scale})`;
+      cursorS.setProperty('--cursor-lift', `${lift}px`);
 
       frameId = requestAnimationFrame(render);
     };
@@ -561,6 +564,8 @@ function CustomCursor(){
       mx = e.clientX;
       my = e.clientY;
       document.documentElement.classList.add('has-custom-cursor');
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(()=> document.documentElement.classList.remove('page-scrolling'), 120);
     };
 
     const onOver = (e)=>{
@@ -571,37 +576,51 @@ function CustomCursor(){
       }
     };
 
+    const onDown = (e)=>{
+      document.documentElement.classList.add('cursor-active');
+      if(burst){
+        burstS.left = `${e.clientX}px`;
+        burstS.top = `${e.clientY}px`;
+        burst.classList.remove('is-active');
+        burst.getBoundingClientRect();
+        burst.classList.add('is-active');
+      }
+      clearTimeout(activeTimer);
+      activeTimer = setTimeout(()=> document.documentElement.classList.remove('cursor-active'), 140);
+    };
+
+    const onScroll = ()=>{
+      const scrollY = window.__virtualScrollY ?? window.scrollY ?? 0;
+      const prevScroll = Number(document.documentElement.dataset.cursorScroll || scrollY);
+      const delta = Math.min(160, Math.abs(scrollY - prevScroll));
+      document.documentElement.dataset.cursorScroll = String(scrollY);
+      scrollKick = Math.min(140, scrollKick + delta * 1.15);
+      document.documentElement.classList.add('page-scrolling');
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(()=> document.documentElement.classList.remove('page-scrolling'), 120);
+    };
+
     window.addEventListener('pointermove', onMove, {passive:true});
     window.addEventListener('pointerleave', ()=> document.documentElement.classList.remove('has-custom-cursor'));
-    window.addEventListener('pointerdown', ()=> document.documentElement.classList.add('cursor-active'), {passive:true});
+    window.addEventListener('pointerdown', onDown, {passive:true});
     window.addEventListener('pointerup', ()=> document.documentElement.classList.remove('cursor-active'), {passive:true});
+    window.addEventListener('scroll', onScroll, {passive:true});
     document.addEventListener('mouseover', onOver, {passive:true});
     frameId = requestAnimationFrame(render);
 
     return ()=>{
       cancelAnimationFrame(frameId);
+      clearTimeout(activeTimer);
+      clearTimeout(scrollTimer);
+      window.removeEventListener('scroll', onScroll);
     };
   },[]);
 
   return (
     <div className="custom-cursor-layer" aria-hidden="true">
-      <div className="cursor-dot-wrap" ref={dotRef}>
-        <div className="cursor-dot"></div>
-      </div>
-      <div className="cursor-ring-wrap" ref={ringRef}>
-        <svg className="cursor-tacho" viewBox="0 0 44 44">
-          <circle className="tacho-ring" cx="22" cy="22" r="20"/>
-          <circle className="tacho-glow" cx="22" cy="22" r="20"/>
-          <line className="tacho-tick" x1="2" y1="22" x2="5" y2="22"/>
-          <line className="tacho-tick" x1="7.5" y1="10" x2="10" y2="12"/>
-          <line className="tacho-tick" x1="17" y1="3" x2="18" y2="6"/>
-          <line className="tacho-tick" x1="22" y1="2" x2="22" y2="5"/>
-          <line className="tacho-tick" x1="27" y1="3" x2="26" y2="6"/>
-          <line className="tacho-tick" x1="36.5" y1="10" x2="34" y2="12"/>
-          <line className="tacho-tick" x1="42" y1="22" x2="39" y2="22"/>
-          <line ref={needleRef} className="tacho-needle" x1="22" y1="22" x2="22" y2="5"/>
-          <circle className="tacho-center" cx="22" cy="22" r="2.5"/>
-        </svg>
+      <div className="cursor-burst" ref={burstRef}></div>
+      <div className="cursor-keychain-wrap" ref={cursorRef}>
+        <img className="cursor-keychain" src="chaveico.png" alt="" />
       </div>
     </div>
   );
@@ -622,6 +641,43 @@ function App(){
         .add({targets:'#scrollCue', opacity:[0,1], duration:600}, '-=300');
     }
   },[videoDone]);
+
+  useEffect(()=>{
+    const root = document.documentElement;
+    let rafId = 0;
+    let scrollStopTimer = 0;
+
+    const updateScrollVars = ()=>{
+      const scrollY = window.__virtualScrollY ?? window.scrollY ?? 0;
+      const maxScroll = Math.max(root.scrollHeight - root.clientHeight, 1);
+      root.style.setProperty('--scroll-y', `${scrollY}px`);
+      root.style.setProperty('--scroll-progress', String(scrollY / maxScroll));
+    };
+
+    const onScroll = ()=>{
+      root.classList.add('page-scrolling');
+      if(!rafId){
+        rafId = requestAnimationFrame(()=>{
+          updateScrollVars();
+          rafId = 0;
+        });
+      }
+      clearTimeout(scrollStopTimer);
+      scrollStopTimer = setTimeout(()=>{
+        root.classList.remove('page-scrolling');
+      }, 110);
+    };
+
+    updateScrollVars();
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', updateScrollVars);
+    return ()=>{
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateScrollVars);
+      cancelAnimationFrame(rafId);
+      clearTimeout(scrollStopTimer);
+    };
+  },[]);
 
   useEffect(()=>{
     const sections = Array.from(document.querySelectorAll('section, footer')).filter(el => !el.classList.contains('hero'));
