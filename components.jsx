@@ -620,7 +620,7 @@ function CustomCursor(){
     <div className="custom-cursor-layer" aria-hidden="true">
       <div className="cursor-burst" ref={burstRef}></div>
       <div className="cursor-keychain-wrap" ref={cursorRef}>
-        <img className="cursor-keychain" src="chaveico.png" alt="" />
+        <img className="cursor-keychain" src="chaveico.svg" alt="" />
       </div>
     </div>
   );
