@@ -47,8 +47,8 @@ html.has-custom-cursor .custom-cursor-layer{opacity:1;}
   transition:filter .2s ease,opacity .2s ease;
 }
 .cursor-keychain{
-  width:32px;
-  height:32px;
+  width:24px;
+  height:24px;
   display:block;
   object-fit:contain;
   transform:translate(-50%,-50%) translateY(var(--cursor-lift, 0px)) rotateX(var(--cursor-depth, 0deg)) rotate(var(--cursor-tilt, 0deg)) scale(var(--cursor-scale, 1));
