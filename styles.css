@@ -196,7 +196,9 @@ section{position:relative;padding:160px 0;}
 
 .about{background:var(--black-2);}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:18px;overflow:hidden;}
-.about-card{padding:56px;background:var(--black);}
+.about-grid .reveal,.about-grid .about-card{height:100%;}
+.about-card{padding:56px;background:var(--black);display:flex;flex-direction:column;}
+.about-card p:last-child{margin-top:auto;padding-top:18px;}
 .about-card.dark{background:radial-gradient(ellipse 500px 340px at 80% 20%, rgba(46,125,50,.14), transparent 60%), linear-gradient(160deg,#16110C,#0D0A08);}
 .about-card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--green-light);text-transform:uppercase;}
 .about-card h3{font-size:26px;color:var(--white);margin-top:18px;font-weight:500;}
