@@ -49,6 +49,31 @@ E siga o assistente (linka com sua conta e projeto).
 O deploy é **automático**: toda vez que você enviar alterações para a branch `main`,
 o Vercel publica a nova versão sozinho.
 
+### ⚠️ Opção rápida (recomendada): deploy direto via CLI
+
+> Usar `git push` gera **2 deploys** (um do push pro GitHub + outro que você fizer depois).
+> Se você quer publicar **só uma vez**, direto pro ar, use o CLI:
+
+```bash
+# Salva as alterações (commit)
+git add .
+git commit -m "Ex.: Ajusta cores da landing page"
+git push origin main   # opcional, mas mantém o GitHub atualizado
+
+# Publica direto em produção (1 deploy só)
+vercel --prod --yes
+```
+
+Depois de rodar, o Vercel mostra algo tipo:
+
+```
+Production   https://forschen-mlas5og54-brakisters-projects.vercel.app
+Aliased      https://forschen.vercel.app   ← esse é o domínio que fica no ar
+```
+
+O `--yes` responde "sim" aos avisos automaticamente. Sem ele, o CLI pergunta
+confirmação antes de subir.
+
 ### Passo a passo diário
 
 ```bash
@@ -95,6 +120,7 @@ Aguarde 1–2 minutos. Acompanhe o status em
 | Quero...                                      | Faça isso                                         |
 |-----------------------------------------------|---------------------------------------------------|
 | Ver o deploy | `https://vercel.com/dashboard` → projeto `forschen` |
-| Vai pôr alteração no ar | `git add . && git commit -m "..." && git push origin main` |
+| Vai pôr alteração no ar (sem deploy duplo) | `vercel --prod --yes` |
+| Vai pôr alteração no ar pelo git (faz 2 deploys) | `git add . && git commit -m "..." && git push origin main` |
 | Dar um domínio próprio (ex.: www.meudominio.com.br) | Vercel → projeto → **Settings → Domains** → adicionar seu domínio |
 | Ver preview de um branch (sem publicar)        | Crie uma branch nova, commit e push nela; o Vercel gera uma URL de preview |
